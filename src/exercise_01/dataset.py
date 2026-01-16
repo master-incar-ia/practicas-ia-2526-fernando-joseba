@@ -33,6 +33,7 @@ class NoisyRegressionDataset(Dataset):
         return len(self.x)
 
     def __getitem__(self, idx):
+        # return self.x[idx], self.y[idx] # Se puede hacer así, pero es mejor usar tensores de torch
         return torch.tensor(self.x[idx], dtype=torch.float32), torch.tensor(
             self.y[idx], dtype=torch.float32
         )

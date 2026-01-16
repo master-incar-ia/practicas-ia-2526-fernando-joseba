@@ -1,3 +1,5 @@
+# Este es un ejemplo de una clase simple en Python que representa una brocha para pintar.
+
 class Brocha:
     def __init__(self, color: str, tamanio: int):
         self.color = color
