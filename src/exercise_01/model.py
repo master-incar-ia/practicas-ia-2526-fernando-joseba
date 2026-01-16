@@ -40,16 +40,8 @@ class MultiLayerPerceptron(nn.Module):  # Hereda de nn.Module, es un requisito
 
 
 if __name__ == "__main__":
-    model1 = MultiLayerPerceptron(1, 1, 2, "mi_modelo_sencillo")
-    model2 = MultiLayerPerceptron(1000, 2, 16, "mi_modelo_de_desfribilador")
-
-    x = torch.tensor(
-        [1, 0]
-    )  # SI usamos torch.tensor tiene forward y backward, automaticamente se hace
-    # un grafo gigante de tal forma que le pasas un x y calcula el grafo sin nececidad de hacer nada
-    print(model1.forward(x))
+    model = SimplePerceptron(1, 1)
+    print(model)
+    x = torch.tensor([1.0])
+    print(model(x))
     pass
-    # print(model)
-    # x = torch.tensor([1.0])
-    # print(model(x))
-    # pass

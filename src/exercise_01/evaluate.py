@@ -12,12 +12,12 @@ from .model import SimplePerceptron
 
 
 def evaluate_and_plot(loader,model, dataset_name, output_folder):
-    model.eval()
-    all_inputs = []
-    all_outputs = []
-    all_targets = []
+    model.eval() # Poner el modelo en modo evaluación para poder desactivar dropout, batchnorm, etc.
+    all_inputs = [] # X
+    all_outputs = [] # Y'
+    all_targets = [] # Y
 
-    with torch.no_grad():
+    with torch.no_grad(): # Desactivar el cálculo de gradientes para ir más rápido
         for inputs, targets in loader:
             outputs = model(inputs)
             all_inputs.append(inputs.numpy())
@@ -39,8 +39,8 @@ def evaluate_and_plot(loader,model, dataset_name, output_folder):
     r2 = 1 - np.sum((all_targets - all_outputs) ** 2) / np.sum(
         (all_targets - np.mean(all_targets)) ** 2
     )
-    mae = np.mean(np.abs(all_targets - all_outputs))
-    mse = np.mean((all_targets - all_outputs) ** 2)
+    mae = np.mean(np.abs(all_targets - all_outputs)) # Media de la resta de los valores absolutos
+    mse = np.mean((all_targets - all_outputs) ** 2) # Media de la resta al cuadrado
 
     metrics = {
         "R2": r2,

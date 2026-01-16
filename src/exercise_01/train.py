@@ -10,6 +10,7 @@ from tqdm import tqdm
 from .dataset import NoisyRegressionDataset
 from .model import SimplePerceptron
 
+
 def get_device(force: str = "auto") -> torch.device:
     """Return a torch.device based on the `force` option.
 
@@ -58,27 +59,25 @@ def train_model(output_folder: Path, device: torch.device):
     for epoch in tqdm(range(num_epochs)):
         model.train()
         train_loss = 0
-        for inputs, targets in train_loader:
+        for inputs, targets in train_loader: # input:x; target:y
             # Forward pass
             inputs_cuda = inputs.to(device)
             targets_cuda = targets.to(device)
-            outputs = model(inputs_cuda, use_activation=False)
+            outputs = model(inputs_cuda, use_activation=False) # outputs: y' (y gorro)
             loss = criterion(outputs, targets_cuda)
-
-
 
             train_loss += loss.item()
 
             # Backward pass and optimization
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            optimizer.zero_grad() # Poner a cero los gradientes antes de la backward
+            loss.backward() # Calcular los gradientes
+            optimizer.step() # Actualizar los pesos
 
         train_loss /= len(train_loader)
         train_losses.append(train_loss)
 
         # Validation step
-        model.eval()
+        model.eval() # Poner el modelo en modo evaluación para poder desactivar dropout, batchnorm, etc.
         val_loss = 0
         with torch.no_grad():
             for inputs, targets in val_loader:
@@ -126,5 +125,3 @@ if __name__ == "__main__":
 
     # Set the seed for reproducibility
     torch.manual_seed(42)
-    
-    
