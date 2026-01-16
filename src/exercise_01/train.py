@@ -10,6 +10,7 @@ from tqdm import tqdm
 from .dataset import NoisyRegressionDataset
 from .model import SimplePerceptron
 
+
 def get_device(force: str = "auto") -> torch.device:
     """Return a torch.device based on the `force` option.
 
@@ -126,5 +127,3 @@ if __name__ == "__main__":
 
     # Set the seed for reproducibility
     torch.manual_seed(42)
-    
-    
