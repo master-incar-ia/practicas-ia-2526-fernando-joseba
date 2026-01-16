@@ -45,6 +45,7 @@
             "request": "launch",
             "module": "src.exercise_01.evaluate",
             "console": "integratedTerminal"
+            // justMyCode: false # para debugear librerias externas
         },
          ]
 }
