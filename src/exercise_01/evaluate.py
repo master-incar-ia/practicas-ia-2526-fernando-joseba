@@ -7,8 +7,8 @@ import seaborn as sns
 import torch
 from torch.utils.data import DataLoader, random_split
 
-from .dataset import NoisyRegressionDataset
-from .model import SimplePerceptron
+from dataset import NoisyRegressionDataset
+from model import SimplePerceptron
 
 
 def evaluate_and_plot(loader,model, dataset_name, output_folder):

@@ -7,8 +7,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
-from .dataset import NoisyRegressionDataset
-from .model import SimplePerceptron
+from dataset import NoisyRegressionDataset
+from model import SimplePerceptron
 
 
 def get_device(force: str = "auto") -> torch.device:
