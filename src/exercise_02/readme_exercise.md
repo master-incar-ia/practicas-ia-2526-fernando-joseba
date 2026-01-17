@@ -1,29 +1,28 @@
+# Ejercicio 1: Aprende una función lineal con PyTorch
 
-# Exercise 1: Learn a linear function with PyTorch
+## Objetivo
 
-## Objective
+Estimación de una función desconocida mediante un modelo de aprendizaje automático
 
-Estimation of a unknown function by a machine learning model
+## Formalización de tareas
 
-## Task Formalization
+La tarea que se puede formalizar en dos pasos. Primero, definiremos lo que intentamos lograr de la forma más clara posible. En segundo lugar, definiremos el enfoque que estamos adoptando para resolverlo.
 
-The task in hand can be formalized in two steps. First, we will define what we are tring to achieve as clearlly as possible. Second, we will define the approach we are taking to solve it.
+### Formalización de tareas (Inferencia)
 
-### Task Formalization (Inference)
-
-There is an unknown function $f$ for which we have a bunch of data about certain input $x$ and its corresponding output $y$.
+Existe una función desconocida $f$ para lo cual disponemos de un montón de datos sobre ciertas entradas $x$ y su salida correspondiente $y$.
 
 $$
 y = f(x)
 $$
 
-We are trying to create a model of $f$ using a Machine Learning method to infer the $W$ weight matrix that better expreses the relationship between $x$-$y$ pair of data. Mathematically expressed:
+Estamos intentando crear un modelo de $f$ usando un método de aprendizaje automático para inferir la matriz de pesos de $W$ que exprese mejor la relación entre $x$-$y$ de datos. Expresado matemáticamente:
 
 $$
 y = f(W,x)
 $$
 
-Graphically expressed:
+Expresado gráficamente:
 
 ```mermaid
 graph TD
@@ -31,80 +30,78 @@ graph TD
     B --> C((y))
     
 ```
-The input vector has size [bs x 1]. The weight matrix has size [1 x 1]
 
-### Task Formalization (Training)
+El vector de entrada tiene tamaño [bs x 1]. La matriz de pesos tiene un tamaño [1 x 1]
 
-Write your answer here
+### Formalización de tareas (Entrenamiento)
 
-## Evaluation metrics
+Escribe tu respuesta aquí
 
-Since we are dealing with a regression problem, we will use the mean squared error (MSE), mean absolute error (MAE), and R-squared as evaluation metrics.
+## Métricas de evaluación
 
-## Data Considerations
+Como estamos tratando con un problema de regresión, utilizaremos el error cuadrático medio (MSE), el error absoluto medio (MAE) y el R-cuadrado como métricas de evaluación.
 
-### Dataset description
+## Consideraciones de datos
 
-Dataset contains 100 noisy data points with a noise standard deviation of 20 from the true function (y = -3x^2+5x).
+### Descripción del conjunto de datos
 
-### Data preparation and preprocessing
+El conjunto de datos contiene 100 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real (y = -3x^2+5x).
 
-No preprocessing has been performed. Dataset has been split into train, validation, and test sets.
+### Preparación y preprocesamiento de datos
 
-### Data augmentation
+No se ha realizado ningún preprocesado. El conjunto de datos se ha dividido en conjuntos de entrenamiento, validación y prueba.
 
-No data augmentation has been performed.
+### Aumento de datos
 
-## Model Considerations
+No se ha realizado ninguna ampliación de datos.
 
-Write your answer here
+## Consideraciones del modelo
 
-### Suitable Loss Functions
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Funciones de pérdida adecuadas
 
-### Selected Loss Function
+Escribe tu respuesta aquí.
 
-As it is a regression task, MSE loss is used.
+### Función de Pérdida Seleccionada
+
+Como es una tarea de regresión, se utiliza la función MSE.
 
 Se elige esta función de coste ya que se trata de predecir números.
 
-### Possible architectures
+### Posibles arquitecturas
 
-A simple perceptron architecture is used as a baseline. This architecture has two parameters: W and b and they are learned during training.
+Se utiliza una arquitectura de perceptrón simple como base. Esta arquitectura tiene dos parámetros: $W$ y $b$, y se aprenden durante el entrenamiento.
 
-**
+### Activación de la última capa
 
-### Last layer activation
+Como es una tarea de regresión sin límites inferiores ni superiores, la activación de la última capa se establece en función Identidad.
 
-As it is a regression task with no lower and upper limits, the last layer activation is set to Identity function.
-
-### Other Considerations
+### Otras consideraciones
 
 Añadir lo que consideremos oportuno
 
-## Training
+## Entrenamiento
 
-Training has been performed during the course of 100 epochs. The loss function graph is shown below.
+El entrenamiento se ha realizado a lo largo de 100 épocas. El gráfico de la función de pérdida se muestra a continuación.
 
-### Training hyperparameters
+### Hiperparámetros de entrenamiento
 
-Learning rate is set to 0.0001
-**
+La tasa de aprendizaje se establece en 0,0001
 
-### Loss function graph
+### Grafo de la función de pérdida
 
 ![image](../../outs/exercise_02/loss_plot.png)
 
-### Discussion of the training process
+### Discusión sobre el proceso de entrenamiento
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-## Evaluation
+## Evaluación
 
-### Evaluation metrics
+### Métricas de evaluación
 
-Write your answer here
+Escribe tu respuesta aquí.
 
 ![image](../../outs/exercise_02/train_regression_plot.png)
 
@@ -112,53 +109,43 @@ Write your answer here
 
 ![image](../../outs/exercise_02/test_regression_plot.png)
 
-Metrics for each dataset is depicted: 
+Las métricas de cada conjunto de datos se representan:
 
 ![image](../../outs/exercise_02/metrics.png)
 
-### Evaluation results
+### Evaluación de los resultados
 
-Here you have examples of evaluation results for train, validation and test sets.
+Aquí tenéis ejemplos de resultados de evaluación para conjuntos de entrenamiento, validación y prueba.
 
-Example for train set:
+Ejemplo para el conjunto de entrenamiento:
 
 ![image](../../outs/exercise_02/train_data_points_plot.png)
 
-
-Example for validation set:
+Ejemplo para el conjunto de validación:
 
 ![image](../../outs/exercise_02/validation_data_points_plot.png)
 
-
-Example for test set:
+Ejemplo para el conjunto de pruebas:
 
 ![image](../../outs/exercise_02/test_data_points_plot.png)
 
+### Discusión de los resultados
 
-### Discussion of the results
+¿Cómo resuelve el modelo el problema?
+¿Hay sobreajuste, subajuste o algún otro problema? 
+¿Cómo podemos mejorar el modelo?
+¿Cómo se generalizará este modelo a nuevos datos?
 
-How the model solves the problem?
-Is there overfitting, underfitting or any other issues? 
-How can we improve the model?
-How this model will generalize to new data?
+## Diseño de bucles de retroalimentación
 
-## Design Feedback loops
+Describe el proceso que has seguido para mejorar el modelo y la evolución del rendimiento del modelo durante el proceso.
 
-Describe the process you have followed to improve the model and the evolution of performance of the model during the process.
+Puedes incluir una tabla que indique los chanched parameters y los resultados obtenidos tras el proceso.
 
-You can include a table stating the chanched parameters and the obtained results after the process.
+## Preguntas
 
+Por favor, responde a las siguientes preguntas. Incluye gráficos si es necesario. Almacenar los gráficos en la carpeta `outs/exercise_02`.
 
-## Questions
+### ¿Cuáles son las diferencias que encontraste entre el modelo anterior y este?
 
-Pleaser answer the following questions. Include graphs if necessary. Store the graphs in the `outs/exercise_02` folder.
-
-### Which are the differences you found between previous model and this one?
-
-### Does the model generalizes well to new data?
-
-
-
-
-
-
+### ¿El modelo se generaliza bien a datos nuevos?

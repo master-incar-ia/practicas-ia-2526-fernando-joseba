@@ -1,93 +1,92 @@
+Ejercicio 1: Crear un modelo de aprendizaje profundo para la detección de desfibrilación a partir de ECG en PyTorch
 
-# Exercise 1: Create a Deep Learning Model for defibrillation detection from ECG in PyTorch 
-## Objective
+## Objetivo
 
-Develop a model that can classify deffibrillation from ECG
+Desarrollar un modelo que pueda clasificar la desfibrilación a partir del ECG
 
-First, please, unzip the file data/ecg/cut_pub_4sec.zip and add it to git LFS:
-git lfs track data/ecg/**
+Primero, por favor, descomprime los datos del archivo/ecg/cut_pub_4sec.zip y añádelos a git LFS: Datos de seguimiento GIT LFS/ECG/**
 
-First try a first model only with fully connected layers 
-Then try a second model with convolutional layers 
+Primero prueba un primer modelo solo con capas totalmente conectadas Luego prueba un segundo modelo con capas convolucionales
 
-Create an evaluate.py file that evaluates the model and calculates and stores the evaluation metrics including a confusion matrix
+Crear un archivo evaluate.py que evalúe el modelo y calcule y almacene las métricas de evaluación, incluyendo una matriz de confusión
 
-Which are the conclussions?
+¿Cuáles son las conclusiones?
 
-## Task Formalization
+## Formalización de tareas
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Task Formalization (Inference)
+### Formalización de tareas (Inferencia)
 
-Write your answer here
-### Task Formalization (Training)
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Formalización de tareas (Entrenamiento)
 
-## Evaluation metrics
+Escribe tu respuesta aquí.
 
-Write your answer here
+## Métricas de evaluación
 
-## Data Considerations
+Escribe tu respuesta aquí.
 
-### Dataset description
+## Consideraciones de datos
 
-Write your answer here
+### Descripción del conjunto de datos
 
-### Data preparation and preprocessing
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Preparación y preprocesamiento de datos
 
-### Data augmentation
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Aumento de datos
 
-## Model Considerations
+Escribe tu respuesta aquí.
 
-Write your answer here
+## Consideraciones del modelo
 
-### Suitable Loss Functions
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Funciones de pérdida adecuadas
 
-### Selected Loss Function
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Función de Pérdida Seleccionada
 
-### Possible architectures
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Posibles arquitecturas
 
-### Last layer activation
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Activación de la última capa
 
-### Other Considerations
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Otras consideraciones
 
-## Training
+Escribe tu respuesta aquí.
 
-Write your answer here
+## Entrenamiento
 
-### Training hyperparameters
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Hiperparámetros de entrenamiento
 
-### Loss function graph
+Escribe tu respuesta aquí.
+
+### Grafo de la función de pérdida
 
 ![image](../../outs/exercise_03/loss_plot.png)
 
-### Discussion of the training process
+### Discusión sobre el proceso de entrenamiento
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-## Evaluation
+## Evaluación
 
-### Evaluation metrics
+### Métricas de evaluacións
 
-Write your answer here
+Escribe tu respuesta aquí.
 
 ![image](../../outs/exercise_03//train_regression_plot.png)
 
@@ -95,53 +94,44 @@ Write your answer here
 
 ![image](../../outs/exercise_03/test_regression_plot.png)
 
-Metrics for each dataset is depicted: 
+Las métricas de cada conjunto de datos se representan:
 
 ![image](../../outs/exercise_03/metrics.png)
 
-### Evaluation results
+### Evaluación de los resultados
 
-Here you have examples of evaluation results for train, validation and test sets.
+Aquí tenéis ejemplos de resultados de evaluación para conjuntos de entrenamiento, validación y prueba.
 
-Example for train set:
+Ejemplo para el conjunto de entrenamiento:
 
 ![image](../../outs/exercise_03/train_data_points_plot.png)
 
-
-Example for validation set:
+Ejemplo para el conjunto de validación:
 
 ![image](../../outs/exercise_03/validation_data_points_plot.png)
 
-
-Example for test set:
+Ejemplo para el conjunto de pruebas:
 
 ![image](../../outs/exercise_03/test_data_points_plot.png)
 
 
-### Discussion of the results
+### Discusión de los resultados
 
-How the model solves the problem?
-Is there overfitting, underfitting or any other issues? 
-How can we improve the model?
-How this model will generalize to new data?
+¿Cómo resuelve el modelo el problema?
+¿Hay sobreajuste, subajuste o algún otro problema? 
+¿Cómo podemos mejorar el modelo?
+¿Cómo se generalizará este modelo a nuevos datos?
 
-## Design Feedback loops
+## Diseño de bucles de retroalimentación
 
-Describe the process you have followed to improve the model and the evolution of performance of the model during the process.
+Describe el proceso que has seguido para mejorar el modelo y la evolución del rendimiento del modelo durante el proceso.
 
-You can include a table stating the chanched parameters and the obtained results after the process.
+Puedes incluir una tabla que indique los chanched parameters y los resultados obtenidos tras el proceso.
 
+## Preguntas
 
-## Questions
+Por favor, responde a las siguientes preguntas. Incluye gráficos si es necesario. Almacenar los gráficos en la carpeta `outs/exercise_06`.
 
-Pleaser answer the following questions. Include graphs if necessary. Store the graphs in the `outs/exercise_03` folder.
+### ¿Cuáles son las diferencias que encontraste entre el modelo anterior y este?
 
-### Which are the differences you found between previous model and this one?
-
-### Does the model generalizes well to new data?
-
-
-
-
-
-
+### ¿El modelo se generaliza bien a datos nuevos?

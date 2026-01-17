@@ -1,31 +1,30 @@
+# Ejercicio 1: Aprende una función lineal con PyTorch
 
-# Exercise 1: Learn a linear function with PyTorch
+## Objetivo
 
-## Objective
+El objetivo de este ejercicio es modelar una función desconocida mediante un método de aprendizaje automático.
 
-The objective of this exercise is to model an unknown function by a machine learning method.
+*Nota del profesor: La función que intentamos modelar es la función lineal y = 5x + 2. El propósito del ejercicio no es descubrir la función analítica, sino crear un modelo que mejor imite el comportamiento de esa función, aunque sea una caja negra para el usuario.*
 
-*Teacher's Note: The function that we are trying to model is the linear function y = 5x + 2. The purpose of the exercise is not to discover the analytical function, but to create a model that best mimics the behavior of that function, even if it is a black box for the user.*
+## Formalización de tareas
 
-## Task Formalization
+La tarea que se puede formalizar en dos pasos. Primero, definiremos lo que intentamos lograr de la forma más clara posible. En segundo lugar, definiremos el enfoque que estamos adoptando para resolverlo.
 
-The task in hand can be formalized in two steps. First, we will define what we are tring to achieve as clearlly as possible. Second, we will define the approach we are taking to solve it.
+### Lo que intentamos hacer (Inferencia)
 
-
-### What we are trying to do (Inference)
-There is an unknown function $f$ for which we have a bunch of data about certain input $x$ and its corresponding output $y$.
+Existe una función desconocida $f$ para lo cual disponemos de un montón de datos sobre ciertas entradas $x$ y su salida correspondiente $y$.
 
 $$
 y = f(x)
 $$
 
-We are trying to create a model of $f$ using a Machine Learning method to infer the $W$ weight matrix that better expreses the relationship between $x$-$y$ pair of data. Mathematically expressed:
+Estamos intentando crear un modelo de $f$ usando un método de aprendizaje automático para inferir la matriz de pesos de $W$ que exprese mejor la relación entre $x$-$y$ de datos. Expresado matemáticamente:
 
 $$
 y = f(W,x)
 $$
 
-Graphically expressed:
+Expresado gráficamente:
 
 ```mermaid
 graph TD
@@ -33,11 +32,12 @@ graph TD
     B --> C((y))
     
 ```
-The input vector has size [bs x 1]. The weight matrix has size [1 x 1]
 
-### How we are going to do it (Training)
+El vector de entrada tiene tamaño [bs x 1]. La matriz de pesos tiene un tamaño [1 x 1]
 
-*Task for the student: Explain what the following diagram is trying to represent. Correct anything if it can be better expressed. You can add your own picture (hand-drawn or otherwise) if you do not like using mermaid. As long as you are able to show us that you understand what you are doing graphically we are OK.*
+### Cómo lo vamos a hacer (entrenamiento)
+
+*Tarea para el estudiante: Explica qué intenta representar el siguiente diagrama. Corregid cualquier cosa si se puede expresar mejor. Puedes añadir tu propia imagen (dibujada a mano o de otro tipo) si no te gusta usar mermaid. Mientras seas capaz de demostrarnos que entiendes lo que haces gráficamente, estará bien.*
 
 ```mermaid
 graph TD
@@ -55,77 +55,71 @@ graph TD
     W --> M
 ```
 
+## Métricas de evaluación
 
-## Evaluation metrics
+Como estamos tratando con un problema de regresión, utilizaremos el error cuadrático medio (MSE), el error absoluto medio (MAE) y el R-cuadrado como métricas de evaluación.
 
-Since we are dealing with a regression problem, we will use the mean squared error (MSE), mean absolute error (MAE), and R-squared as evaluation metrics.
+## Consideraciones de datos
 
-## Data Considerations
+### Descripción del conjunto de datos
 
-### Dataset description
+El conjunto de datos contiene 100 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real (y = 5x + 2).
 
-Dataset contains 100 noisy data points with a noise standard deviation of 20 from the true function (y = 5x + 2).
+### Preparación y preprocesamiento de datos
 
-### Data preparation and preprocessing
+No se ha realizado ningún preprocesado. El conjunto de datos se ha dividido en conjuntos de entrenamiento, validación y prueba.
 
-No preprocessing has been performed. Dataset has been split into train, validation, and test sets.
+### Aumento de datos
 
-### Data augmentation
+No se ha realizado ninguna ampliación de datos.
 
-No data augmentation has been performed.
+## Consideraciones del modelo/modelado
 
-## Model(¿ling?) Considerations
+### Función de pérdida seleccionada
 
-<!-- ### Suitable Loss Functions
-As it is a regression task, MSE loss is used -->
+Como es una tarea de regresión, se utiliza la función MSE.
 
-### Selected Loss Function
+*Tarea para el estudiante: Explica por qué se eligió la función de pérdida. ¿Hay otra alternativa?
 
-As it is a regression task, MSE loss is used.
+### Posibles arquitecturas
 
-*Task for the student: Explain why loss function  may have been chosen. Is there another alternative?
+Se utiliza una arquitectura de perceptrón simple como base. Esta arquitectura tiene dos parámetros: $W$ y $b$, y se aprenden durante el entrenamiento.
 
-### Possible architectures
+*Tarea para el estudiante: Explica por qué se ha elegido este modelo. ¿Por qué un perceptrón simple en lugar de otras alternativas? Explica las ventajas y desventajas. ¿Se va a generalizar bien a datos no vistos? ¿Qué otra alternativa podría usarse?*
 
-A simple perceptron architecture is used as a baseline. This architecture has two parameters: W and b and they are learned during training.
+### Activación de la última capa
 
-*Task for the student: Explain why this model may have been chosen. Why a simple perceptron instead of other alternatives? Explain advantages and disadvantages. Is it going to generalize well to unseen data? Which other alternative could be used?*
+Como es una tarea de regresión sin límites inferiores ni superiores, la activación de la última capa se establece en función Identidad.
 
+### Otras consideraciones
 
-### Last layer activation
+*Tarea para el alumno: Añade lo que consideres importante.*
 
-As it is a regression task with no lower and upper limits, the last layer activation is set to Identity function.
+## Entrenamiento
 
-### Other Considerations
+El entrenamiento se ha realizado a lo largo de 100 épocas. El gráfico de la función de pérdida se muestra a continuación.
 
-*Task for the student: Add whatever else you consider important.*
-
-## Training
-
-Training has been performed during the course of 100 epochs. The loss function graph is shown below.
-
-### Loss function graph
+### Grafo de función de pérdida
 
 ![image](../../outs/exercise_01/loss_plot.png)
 
-### Training hyperparameters
+### Hiperparámetros de entrenamiento
 
-Learning rate is set to 0.0001
+La tasa de aprendizaje se establece en 0,0001
 
-*Task for the student: Make changes until the model works. Explain all the changes you have made to the training hyperparameters and why.*
+*Tarea para el estudiante: Hacer cambios hasta que el modelo funcione. Explica todos los cambios que has hecho en los hiperparámetros de entrenamiento y por qué.*
 
+### Discusión sobre el proceso de entrenamiento
 
-### Discussion of the training process
+Podemos entender que el modelo converge y no ocurre ningún sobreajuste.
 
-We can appreciate that the model converges and no overfitting happens.
+## Evaluación
 
-## Evaluation
+### Métricas de evaluación
 
-### Evaluation metrics
+Como problema de regresión, utilizaremos el error cuadrático medio (MSE), el error absoluto medio (MAE) y el R-cuadrado como métricas de evaluación.
 
-As a regression problem, we will use the mean squared error (MSE), mean absolute error (MAE), and R-squared as evaluation metrics.
-
-We can appreciate regression plots for train, validation and test sets.
+Podemos apreciar gráficos de regresión para conjuntos de entrenamiento, validación y prueba.
 
 ![image](../../outs/exercise_01//train_regression_plot.png)
 
@@ -133,58 +127,48 @@ We can appreciate regression plots for train, validation and test sets.
 
 ![image](../../outs/exercise_01/test_regression_plot.png)
 
-Metrics for each dataset is depicted: 
+Las métricas de cada conjunto de datos se representan: 
 
 ![image](../../outs/exercise_01/metrics.png)
 
-### Evaluation results
+### Evaluación de los resultados
 
-Here you have examples of evaluation results for train, validation and test sets.
+Aquí tenéis ejemplos de resultados de evaluación para conjuntos de entrenamiento, validación y prueba.
 
-Example for train set:
+Ejemplo para el conjunto de entrenamiento:
 
 ![image](../../outs/exercise_01/train_data_points_plot.png)
 
-
-Example for validation set:
+Ejemplo para el conjunto de validación:
 
 ![image](../../outs/exercise_01/validation_data_points_plot.png)
 
-
-Example for test set:
+Ejemplo para el conjunto de pruebas:
 
 ![image](../../outs/exercise_01/test_data_points_plot.png)
 
+### Discusión de los resultados
 
-### Discussion of the results
+*Tarea para el estudiante: ¿Hay sobreajuste, subajuste u otros problemas? ¿Cómo podemos mejorar el modelo? ¿Cómo va a generalizarse este modelo a nuevos datos?*
 
-*Task for the student: Are there overfitting, underfitting or any other issues? How can we improve the model? How is this model going to generalize to new data?*
+## Iteración del diseño
 
-## Iterating the design
+*Tarea para el estudiante: Describe el proceso que has seguido para mejorar el modelo y la evolución del rendimiento del modelo durante el proceso.*
 
-*Task for the student: Describe the process you have followed to improve the model and the evolution of performance of the model during the process.*
+*Puedes incluir una tabla que indique los chanched parameters y los resultados obtenidos tras el proceso.*
 
-*You can include a table stating the chanched parameters and the obtained results after the process.*
+## Preguntas adicionales
 
+*Tarea para el estudiante: Responder a las siguientes preguntas. Incluye gráficos si es necesario. Almacenar los gráficos en la carpeta `outs/exercise_01`.*
 
-## Additional Questions
+### ¿Qué pasa si añades más parámetros al modelo?
 
-*Task for the student: Answer the following questions. Include graphs if necessary. Store the graphs in the `outs/exercise_01` folder.*
+### ¿Qué pasa si añades más capas al modelo?
 
-### What happens if you add more parameters to the model?
+### ¿Qué ocurre si cambias la función de activación de la última capa a ReLU?
 
-### What happens if you add more layers to the model?
+### ¿Y a Sigmoid?
 
-### What happens if you change the activation function of the last layer to ReLU?
+### ¿Qué pasa si cambias la velocidad de aprendizaje?
 
-### And to Sigmoid?
-
-### What happens if you change the learning rate?
-
-### Please, reduce the data points of the dataset to 10 and create 2 layers / 20 neurons each. In this case, how can you reduce the overfitting problem?
-
-
-
-
-
-
+### Por favor, reduce los puntos de datos del conjunto de datos a 10 y crea 2 capas / 20 neuronas cada una. En este caso, ¿cómo puedes reducir el problema de sobreajuste?
