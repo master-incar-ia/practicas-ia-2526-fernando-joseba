@@ -1,3 +1,5 @@
+# Script de entrenamiento
+
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -9,6 +11,8 @@ from tqdm import tqdm
 
 from dataset import NoisyRegressionDataset
 from model import SimplePerceptron
+from model import MultiLayerPerceptron
+from model import DeepMultiLayerPerceptron
 
 
 def get_device(force: str = "auto") -> torch.device:
@@ -32,9 +36,7 @@ def train_model(output_folder: Path, device: torch.device):
     train_size = int(0.7 * len(dataset))
     val_size = int(0.15 * len(dataset))
     test_size = len(dataset) - train_size - val_size
-    train_dataset, val_dataset, test_dataset = random_split(
-        dataset, [train_size, val_size, test_size]
-    )
+    train_dataset, val_dataset, test_dataset = random_split( dataset, [train_size, val_size, test_size])
 
     # Create DataLoaders for the datasets
     pin_memory = True if device.type == "cuda" else False
@@ -45,13 +47,17 @@ def train_model(output_folder: Path, device: torch.device):
     input_dim = 1
     output_dim = 1
     model = SimplePerceptron(input_dim, output_dim).to(device)
+    # model = MultiLayerPerceptron(input_dim, output_dim, num_hidden_neurons=10, apodo="MLP_10").to(device)
+    # model = DeepMultiLayerPerceptron(input_dim, output_dim, hidden_dim=10, apodo="DeepMLP_2x10").to(device)
     criterion = nn.MSELoss()
-    optimizer = optim.AdamW(model.parameters(), lr=0.0001)
+    optimizer = optim.AdamW(model.parameters(), lr=0.0001) # AdamW es el algoritmo de optimización y lr es la tasa de aprendizaje (learning rate)
 
     # Training loop with validation and saving best weights
-    num_epochs = 100
+    num_epochs = 100 # Número de épocas
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
+    # best_model_path = output_folder / "best_model_more_params.pth"
+    # best_model_path = output_folder / "best_model_more_layers.pth"
 
     train_losses = []
     val_losses = []
@@ -112,7 +118,8 @@ def train_model(output_folder: Path, device: torch.device):
 
     # Save the plot to the outs/ folder
     plt.savefig(output_folder / "loss_plot.png")
-    plt.savefig(output_folder / "loss_plot.png")
+    # plt.savefig(output_folder / "loss_plot_more_params.png")
+    # plt.savefig(output_folder / "loss_plot_more_layers.png")
 
 if __name__ == "__main__":
     # Create output folder based on file folder

@@ -1,3 +1,5 @@
+# Script de evaluación y generación de gráficos
+
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -9,6 +11,8 @@ from torch.utils.data import DataLoader, random_split
 
 from dataset import NoisyRegressionDataset
 from model import SimplePerceptron
+from model import MultiLayerPerceptron
+from model import DeepMultiLayerPerceptron
 
 
 def evaluate_and_plot(loader,model, dataset_name, output_folder):
@@ -115,7 +119,12 @@ if __name__ == "__main__":
 
     # Load the best model weights
     model = SimplePerceptron(input_dim=1, output_dim=1)
+    # model = MultiLayerPerceptron(input_dim=1, output_dim=1, num_hidden_neurons=10, apodo="MLP_10")
+    # model = DeepMultiLayerPerceptron(input_dim=1, output_dim=1, hidden_dim=10, apodo="DeepMLP_2x10")
+
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
+    # model.load_state_dict(torch.load(output_folder / "best_model_more_params.pth"))
+    # model.load_state_dict(torch.load(output_folder / "best_model_more_layers.pth"))
 
     metrics = {}
     # Evaluate and plot for train, validation and test datasets
@@ -125,8 +134,12 @@ if __name__ == "__main__":
 
     # save  metrics as csv
     pd.DataFrame(metrics).to_csv(output_folder / "metrics.csv")
+    # pd.DataFrame(metrics).to_csv(output_folder / "metrics_more_params.csv")
+    # pd.DataFrame(metrics).to_csv(output_folder / "metrics_more_layers.csv")
 
     # Save the metrics as an image
     save_metrics_as_picture(metrics, output_folder / "metrics.png")
+    # save_metrics_as_picture(metrics, output_folder / "metrics_more_params.png")
+    # save_metrics_as_picture(metrics, output_folder / "metrics_more_layers.png")
 
     print("Evaluation complete!")

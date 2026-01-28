@@ -6,7 +6,7 @@ class Brocha:
         self.tamanio = tamanio
 
     def paint(self) -> str:
-        print(f"Painting with a {self.tamanio}cm {self.color} brush.")
+        print(f"Painting with a {self.tamanio} cm {self.color} brush.")
     
     def guardar_dibujo(self, nombre_archivo: str):
         print(f"Saving drawing as {nombre_archivo}.")

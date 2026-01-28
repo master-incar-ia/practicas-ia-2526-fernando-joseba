@@ -5,10 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Module",
+            "name": "Python: Module Exercise 01",
             "type": "debugpy",
             "request": "launch",
             "module": "src.exercise_01.${fileBasenameNoExtension}",
+            "console": "integratedTerminal"
+            // justMyCode: false # para debugear librerias externas
+        },
+        {
+            "name": "Python: Module Exercise 02",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.exercise_02.${fileBasenameNoExtension}",
             "console": "integratedTerminal"
         },
         {
@@ -19,33 +27,32 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "exercise_01.dataset",
+            "name": "exercise_02.dataset",
             "type": "debugpy",
             "request": "launch",
-            "module": "src.exercise_01.dataset",
+            "module": "src.exercise_02.dataset",
             "console": "integratedTerminal"
         },
         {
-            "name": "exercise_01.train",
+            "name": "exercise_02.evaluate",
             "type": "debugpy",
             "request": "launch",
-            "module": "src.exercise_01.train",
+            "module": "src.exercise_02.evaluate",
             "console": "integratedTerminal"
         },
         {
-            "name": "exercise_01.model",
+            "name": "exercise_02.model",
             "type": "debugpy",
             "request": "launch",
-            "module": "src.exercise_01.model",
+            "module": "src.exercise_02.model",
             "console": "integratedTerminal"
         },
         {
-            "name": "exercise_01.evaluate",
+            "name": "exercise_02.train",
             "type": "debugpy",
             "request": "launch",
-            "module": "src.exercise_01.evaluate",
+            "module": "src.exercise_02.train",
             "console": "integratedTerminal"
-            // justMyCode: false # para debugear librerias externas
         },
          ]
 }
