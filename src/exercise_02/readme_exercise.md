@@ -35,7 +35,57 @@ El vector de entrada tiene tamaño [bs x 1]. La matriz de pesos tiene un tamaño
 
 ### Formalización de tareas (Entrenamiento)
 
-Escribe tu respuesta aquí
+#### Explicación del diagrama de entrenamiento
+
+El diagrama representa el proceso completo de entrenamiento de un modelo de
+Machine Learning entrenado mediante la minimización de una función de pérdida.
+
+##### Elementos del diagrama
+
+- x: vector de entrada del modelo (datos de entrada).
+- y: valor real u objetivo.
+- f(W, x): modelo o función parametrizada por los pesos W, que genera
+  una predicción a partir de la entrada.
+- y′: salida estimada o predicción del modelo.
+- Loss: función de pérdida que mide la diferencia entre la predicción
+  y′ y el valor real y.
+- W: conjunto de parámetros (pesos sinápticos) del modelo que se ajustan
+  durante el entrenamiento.
+
+##### Flujo del proceso de aprendizaje
+
+1. La entrada **x** se introduce en el modelo **f(W, x)**.
+2. El modelo genera una predicción **y′**.
+3. La predicción **y′** se compara con el valor real **y** mediante la función
+   de pérdida **Loss(y, y′)**.
+4. La función de pérdida produce un valor escalar que cuantifica el error del
+   modelo.
+5. Este error se utiliza para actualizar los pesos **W**, generalmente mediante
+   un algoritmo de optimización basado en gradiente descendente.
+6. Los pesos actualizados se realimentan al modelo, cerrando el ciclo de
+   entrenamiento.
+
+Este proceso se repite de forma iterativa hasta que la función de pérdida
+converge o se alcanza un criterio de parada.
+
+```mermaid
+graph TD
+    A((x))
+    B((y))
+    M["Modelo f(W,x)"]
+    C((y'))
+    L["Loss(y, y')"]
+    O["Optimizador (Gradiente Descente o Adam)"]
+    W((W))
+
+    A --> M
+    W --> M
+    M --> C
+    C --> L
+    B --> L
+    L --> O
+    O --> W
+```
 
 ## Métricas de evaluación
 
@@ -59,15 +109,22 @@ No se ha realizado ninguna ampliación de datos.
 
 Escribe tu respuesta aquí.
 
-### Funciones de pérdida adecuadas
+### Funciones de pérdida adecuadas [ESCRIBIR RESPUESTA]
 
-Escribe tu respuesta aquí.
+La función de pérdida utilizada depende del tipo de problema:
 
-### Función de Pérdida Seleccionada
+- En regresión no lineal, se emplea el error cuadrático medio (MSE).
+- En problemas de clasificación, se utiliza la entropía cruzada.
 
-Como es una tarea de regresión, se utiliza la función MSE.
+### Función de Pérdida Seleccionada [ESCRIBIR RESPUESTA]
 
-Se elige esta función de coste ya que se trata de predecir números.
+En esta tarea se utiliza la función de pérdida MSE (Mean Squared Error), ya que el problema planteado es un problema de regresión no lineal, en el que la salida del modelo es una variable continua.
+
+La función MSE mide el error medio al cuadrado entre el valor real y y la predicción del modelo y′, y se define como:
+
+$$\text{MSE} = \frac{1}{N} \sum_{i=1}^{N} (y_i - y'_i)^2$$
+
+El objetivo del entrenamiento es ajustar los pesos sinápticos del modelo para minimizar esta función de pérdida mediante un algoritmo de optimización basado en gradiente descendente.
 
 ### Posibles arquitecturas
 
