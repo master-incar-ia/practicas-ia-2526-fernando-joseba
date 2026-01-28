@@ -347,5 +347,4 @@ Al reducir el conjunto de datos a solo 10 puntos y utilizar una red neuronal con
 
 El sobreajuste ocurre cuando el modelo aprende en exceso los datos de entrenamiento y no generaliza correctamente a datos no vistos. En este caso, es esperable observar una pérdida de entrenamiento baja y una pérdida de validación o test mayor, indicando que el modelo no generaliza bien.
 
-Para reducir este problema de sobreajuste, se propone el uso de
-técnicas de regularización. Entre ellas se encuentran la regularización L2, que penaliza valores grandes de los pesos sinápticos, la regularización L1, que fuerza muchos pesos a tomar valores cercanos a cero, y el Dropout, que desactiva aleatoriamente neuronas durante el entrenamiento. Estas técnicas limitan la complejidad efectiva del modelo y ayudan a mejorar su capacidad de generalización cuando se dispone de pocos datos.
+Para reducir este problema de sobreajuste, se propone el uso de técnicas de regularización. Entre ellas se encuentran la regularización L2, que penaliza valores grandes de los pesos sinápticos, la regularización L1, que fuerza muchos pesos a tomar valores cercanos a cero, y el Dropout, que desactiva aleatoriamente neuronas durante el entrenamiento. Estas técnicas limitan la complejidad efectiva del modelo y ayudan a mejorar su capacidad de generalización cuando se dispone de pocos datos.
