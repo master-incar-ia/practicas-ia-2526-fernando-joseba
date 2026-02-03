@@ -7,8 +7,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
-from dataset import NoisyRegressionDataset
-from model import SimplePerceptron
+from .dataset import NoisyRegressionDataset
+from .model import MultiLayerPerceptron
 
 
 def get_device(force: str = "auto") -> torch.device:
@@ -44,12 +44,12 @@ def train_model(output_folder: Path, device: torch.device):
     # Define the model, loss function, and optimizer
     input_dim = 1
     output_dim = 1
-    model = SimplePerceptron(input_dim, output_dim).to(device)
+    model = MultiLayerPerceptron(input_dim, output_dim, num_hidden_neurons=64, apodo="exercise_02").to(device)
     criterion = nn.MSELoss()
-    optimizer = optim.AdamW(model.parameters(), lr=0.0001)
+    optimizer = optim.AdamW(model.parameters(), lr=0.001)
 
     # Training loop with validation and saving best weights
-    num_epochs = 100
+    num_epochs = 200 # Aumentamos de 100 a 250 porque el validation loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 

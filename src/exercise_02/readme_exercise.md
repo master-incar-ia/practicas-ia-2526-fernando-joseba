@@ -1,4 +1,4 @@
-# Ejercicio 1: Aprende una función lineal con PyTorch
+# Ejercicio 2: Aprende una función lineal con PyTorch
 
 ## Objetivo
 

@@ -39,12 +39,11 @@ class NoisyRegressionDataset(Dataset):
 
 
 if __name__ == "__main__":
-    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name 
+    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
     output_folder.mkdir(exist_ok=True, parents=True)
 
     dataset = NoisyRegressionDataset()
     print(f"Dataset length: {len(dataset)}")
     print(f"First item: {dataset[0]}")
     # save the plot
-    dataset.plot(output_folder / "plot_dataset_example.png")
     dataset.plot(output_folder / "plot_dataset_example.png")

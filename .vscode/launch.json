@@ -54,5 +54,12 @@
             "module": "src.exercise_02.train",
             "console": "integratedTerminal"
         },
-         ]
+    {
+            "name": "exercise_01.train",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "src.exercise_01.train",
+            "console": "integratedTerminal"
+        },     
+    ]
 }

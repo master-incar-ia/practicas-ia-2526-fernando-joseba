@@ -7,19 +7,19 @@ import seaborn as sns
 import torch
 from torch.utils.data import DataLoader, random_split
 
-from dataset import NoisyRegressionDataset
-from model import SimplePerceptron
+from .dataset import NoisyRegressionDataset
+from .model import MultiLayerPerceptron
 
 
-def evaluate_and_plot(loader,model, dataset_name, output_folder):
-    model.eval() # Poner el modelo en modo evaluación para poder desactivar dropout, batchnorm, etc.
-    all_inputs = [] # X
-    all_outputs = [] # Y'
-    all_targets = [] # Y
+def evaluate_and_plot(loader, model, dataset_name, output_folder):
+    model.eval()  # Poner el modelo en modo evaluación para poder desactivar dropout, batchnorm, etc.
+    all_inputs = []  # X
+    all_outputs = []  # Y'
+    all_targets = []  # Y
 
-    with torch.no_grad(): # Desactivar el cálculo de gradientes para ir más rápido
+    with torch.no_grad():  # Desactivar el cálculo de gradientes para ir más rápido
         for inputs, targets in loader:
-            outputs = model(inputs)
+            outputs = model(inputs, use_activation=False)
             all_inputs.append(inputs.numpy())
             all_outputs.append(outputs.numpy())
             all_targets.append(targets.numpy())
@@ -39,8 +39,8 @@ def evaluate_and_plot(loader,model, dataset_name, output_folder):
     r2 = 1 - np.sum((all_targets - all_outputs) ** 2) / np.sum(
         (all_targets - np.mean(all_targets)) ** 2
     )
-    mae = np.mean(np.abs(all_targets - all_outputs)) # Media de la resta de los valores absolutos
-    mse = np.mean((all_targets - all_outputs) ** 2) # Media de la resta al cuadrado
+    mae = np.mean(np.abs(all_targets - all_outputs))  # Media de la resta de los valores absolutos
+    mse = np.mean((all_targets - all_outputs) ** 2)  # Media de la resta al cuadrado
 
     metrics = {
         "R2": r2,
@@ -114,7 +114,9 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=10, shuffle=False)
 
     # Load the best model weights
-    model = SimplePerceptron(input_dim=1, output_dim=1)
+    model = MultiLayerPerceptron(
+        input_dim=1, output_dim=1, num_hidden_neurons=64, apodo="exercise_02"
+    )
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
 
     metrics = {}
