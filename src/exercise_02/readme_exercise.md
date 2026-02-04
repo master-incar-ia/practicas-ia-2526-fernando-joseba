@@ -1,4 +1,4 @@
-# Ejercicio 2: Aprende una función lineal con PyTorch
+# Ejercicio 2: Aprende una función cuadrática con PyTorch
 
 ## Objetivo
 
@@ -173,6 +173,7 @@ Las métricas de cada conjunto de datos se representan:
 ### Evaluación de los resultados
 
 Imágenes de los resultados
+
 Ejemplo para el conjunto de entrenamiento:
 
 ![image](../../outs/exercise_02/train_data_points_plot.png)
