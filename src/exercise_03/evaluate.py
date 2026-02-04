@@ -9,8 +9,8 @@ import seaborn as sns
 import torch
 from torch.utils.data import DataLoader, random_split
 
-from .dataset import NoisyRegressionDataset
-from .model import MultiLayerPerceptron
+from dataset import NoisyRegressionDataset
+from model import MultiLayerPerceptron
 
 
 def evaluate_and_plot(loader, model, dataset_name, output_folder):
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     # Load the best model weights
     model = MultiLayerPerceptron(
-        input_dim=1, output_dim=1, num_hidden_neurons=64, apodo="exercise_02"
+        input_dim=1, output_dim=1, num_hidden_neurons=64, apodo="exercise_03"
     )
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
 
