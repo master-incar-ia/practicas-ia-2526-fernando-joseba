@@ -1,4 +1,4 @@
-# Ejercicio 2: Aprende una función lineal con PyTorch
+# Ejercicio 2: Aprende una función cuadrática con PyTorch
 
 ## Objetivo
 
@@ -95,7 +95,7 @@ Como estamos tratando con un problema de regresión, utilizaremos el error cuadr
 
 ### Descripción del conjunto de datos
 
-El conjunto de datos contiene 10.000 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real ($y = -3x^2 + 5x$).
+El conjunto de datos contiene 10000 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real ($y = -3x^2 + 5x$).
 
 ### Preparación y preprocesamiento de datos
 
@@ -176,6 +176,7 @@ Las métricas de cada conjunto de datos se representan:
 ### Evaluación de los resultados
 
 Imágenes de los resultados
+
 Ejemplo para el conjunto de entrenamiento:
 
 ![image](../../outs/exercise_02/train_data_points_plot.png)

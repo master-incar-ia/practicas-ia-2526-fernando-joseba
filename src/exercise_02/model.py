@@ -3,7 +3,6 @@
 import torch
 import torch.nn as nn
 
-
 # Debe tener el init y el forward
 class SimplePerceptron(nn.Module): # Hereda de nn.Module, es un requisito
     """

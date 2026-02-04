@@ -21,7 +21,7 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder):
 
     with torch.no_grad():  # Desactivar el cálculo de gradientes para ir más rápido
         for inputs, targets in loader:
-            outputs = model(inputs, use_activation=False) # La ultima capa no tiene activación
+            outputs = model(inputs, use_activation=False) # La última capa no tiene activación
             all_inputs.append(inputs.numpy())
             all_outputs.append(outputs.numpy())
             all_targets.append(targets.numpy())
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     # Load the best model weights
     model = MultiLayerPerceptron(
-        input_dim=1, output_dim=1, num_hidden_neurons=64, apodo="exercise_02"
+        input_dim=1, output_dim=1, num_hidden_neurons=64, apodo="exercise_03"
     )
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
 

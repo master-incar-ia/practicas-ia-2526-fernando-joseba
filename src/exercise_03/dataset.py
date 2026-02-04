@@ -1,3 +1,5 @@
+# Define el dataset de regresión con ruido senoidal
+
 import math
 from pathlib import Path
 
@@ -11,6 +13,11 @@ from torch.utils.data import Dataset
 
 
 class NoisyRegressionDataset(Dataset):
+    """
+    Genera el dataset con ruido siguiendo la ecuación:
+    y = 100*sin(8*pi*x/100) + 2 + delta
+    donde delta es ruido gaussiano con desviación estándar `noise_std`
+    """
     def __init__(self, noise_std=20, size=100, seed=42):
         np.random.seed(seed)
         self.x = np.random.uniform(0, 100, size=(size,))
@@ -25,15 +32,19 @@ class NoisyRegressionDataset(Dataset):
         self.y = self.y.reshape((-1, 1))
 
     def plot(self, filepath):
+        # Guardar la gráfica de los datos
         ax = sns.scatterplot(self.df, x="x", y="y")
-        ax.set_title("Synthetic noisy data of y=5*x+2")
+        ax.set_title("Synthetic noisy data of y=100*sin(8*pi*x/100) + 2 + delta")
         plt.savefig(filepath)
         plt.show()
 
     def __len__(self):
+        # Para que sea compatible con PyTorch Dataset
         return len(self.x)
 
     def __getitem__(self, idx):
+        # Para que sea compatible con PyTorch Dataset
+        # return self.x[idx], self.y[idx] # Se puede hacer así, pero es mejor usar tensores de torch
         return torch.tensor(self.x[idx], dtype=torch.float32), torch.tensor(
             self.y[idx], dtype=torch.float32
         )
@@ -47,6 +58,4 @@ if __name__ == "__main__":
     print(f"Dataset length: {len(dataset)}")
     print(f"First item: {dataset[0]}")
     # save the plot
-    dataset.plot(output_folder / "plot_dataset_example.png")
-    dataset.plot(output_folder / "plot_dataset_example.png")
     dataset.plot(output_folder / "plot_dataset_example.png")

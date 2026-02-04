@@ -1,17 +1,16 @@
 # Script de entrenamiento
 
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
-
-from dataset import NoisyRegressionDataset
-from model import MultiLayerPerceptron
 from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
+from dataset import NoisyRegressionDataset
+from model import MultiLayerPerceptron
 
 
 def get_device(force: str = "auto") -> torch.device:
@@ -27,7 +26,6 @@ def get_device(force: str = "auto") -> torch.device:
     # auto
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
 def train_model(output_folder: Path, device: torch.device):
     # Create an instance of the dataset
     dataset = NoisyRegressionDataset(size=10000)
@@ -40,20 +38,18 @@ def train_model(output_folder: Path, device: torch.device):
 
     # Create DataLoaders for the datasets
     pin_memory = True if device.type == "cuda" else False
-    train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True, pin_memory=pin_memory)
-    val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False, pin_memory=pin_memory)
+    train_loader = DataLoader(train_dataset, batch_size=10, shuffle=True, pin_memory=pin_memory)
+    val_loader = DataLoader(val_dataset, batch_size=10, shuffle=False, pin_memory=pin_memory)
 
     # Define the model, loss function, and optimizer
     input_dim = 1
     output_dim = 1
-    model = MultiLayerPerceptron(
-        input_dim, output_dim, num_hidden_neurons=64, apodo="exercise_02"
-    ).to(device)
+    model = MultiLayerPerceptron(input_dim, output_dim, num_hidden_neurons=64, apodo="exercise_03").to(device)
     criterion = nn.MSELoss()
-    optimizer = optim.AdamW(model.parameters(), lr=0.0003)
+    optimizer = optim.AdamW(model.parameters(), lr=0.001) # AdamW es el algoritmo de optimización y lr es la tasa de aprendizaje (learning rate)
 
     # Training loop with validation and saving best weights
-    num_epochs = 340  # Aumentamos de 100 a 500 porque el validation loss seguía bajando
+    num_epochs = 200 # Aumentamos de 100 a 200 por el validation loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
@@ -63,31 +59,31 @@ def train_model(output_folder: Path, device: torch.device):
     for epoch in tqdm(range(num_epochs)):
         model.train()
         train_loss = 0
-        for inputs, targets in train_loader:  # input:x; target:y
+        for inputs, targets in train_loader: # input:x; target:y
             # Forward pass
             inputs_cuda = inputs.to(device)
             targets_cuda = targets.to(device)
-            outputs = model(inputs_cuda, use_activation=False)  # outputs: y' (y gorro)
+            outputs = model(inputs_cuda, use_activation=False) # outputs: y' (y gorro)
             loss = criterion(outputs, targets_cuda)
 
             train_loss += loss.item()
 
             # Backward pass and optimization
-            optimizer.zero_grad()  # Poner a cero los gradientes antes de la backward
-            loss.backward()  # Calcular los gradientes
-            optimizer.step()  # Actualizar los pesos
+            optimizer.zero_grad() # Poner a cero los gradientes antes de la backward
+            loss.backward() # Calcular los gradientes
+            optimizer.step() # Actualizar los pesos
 
         train_loss /= len(train_loader)
         train_losses.append(train_loss)
 
         # Validation step
-        model.eval()  # Poner el modelo en modo evaluación para poder desactivar dropout, batchnorm, etc.
+        model.eval() # Poner el modelo en modo evaluación para poder desactivar dropout, batchnorm, etc.
         val_loss = 0
         with torch.no_grad():
             for inputs, targets in val_loader:
                 inputs_cuda = inputs.to(device)
                 targets_cuda = targets.to(device)
-                outputs = model(inputs_cuda, use_activation=False)
+                outputs = model(inputs_cuda)
                 loss = criterion(outputs, targets_cuda)
                 val_loss += loss.item()
 
@@ -100,7 +96,7 @@ def train_model(output_folder: Path, device: torch.device):
 
         if (epoch + 1) % 10 == 0:
             print(
-                f"Epoch [{epoch + 1}/{num_epochs}], Train Loss: {train_loss:.4f}, Validation Loss: {val_loss:.4f}"
+                f"Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss:.4f}, Validation Loss: {val_loss:.4f}"
             )
 
     print(f"Best validation loss: {best_val_loss:.4f}, Model saved to {best_model_path}")
@@ -116,17 +112,20 @@ def train_model(output_folder: Path, device: torch.device):
 
     # Save the plot to the outs/ folder
     plt.savefig(output_folder / "loss_plot.png")
-    plt.savefig(output_folder / "loss_plot.png")
-
 
 if __name__ == "__main__":
+    # Set the seed for reproducibility
+    torch.manual_seed(42)
+
     # Create output folder based on file folder
-    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
+    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name  
     output_folder.mkdir(exist_ok=True, parents=True)
 
-    device = get_device("auto")  # choices are "auto", "cpu", "cuda"
+    device = get_device("auto") # choices are "auto", "cpu", "cuda"
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
 
-    # Set the seed for reproducibility
-    torch.manual_seed(42)
+
+    # con una relu y a 400 epocas el best validation es a 3711
+    # con dos relu y a 200 epocas el best validation es a 3294
+    # con dos relu, 128 neuronas y a 200 epocas el best validation es a 3294
