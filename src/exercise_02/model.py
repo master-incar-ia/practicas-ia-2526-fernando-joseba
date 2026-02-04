@@ -23,15 +23,15 @@ class MultiLayerPerceptron(nn.Module):  # Hereda de nn.Module, es un requisito
         super().__init__()  # es necesario
         self.fc1 = nn.Linear(
             input_dim, num_hidden_neurons
-        )  # Modelo lineal , añade capa lineal del perceptron
-        self.fc2 = nn.Linear(num_hidden_neurons, output_dim)
+        )  # Modelo lineal , añade capa lineal del perceptron, "capa oculta"
+        self.fc2 = nn.Linear(num_hidden_neurons, output_dim) # Capa de salida
         self.activation = nn.Identity()
         self.activation = nn.ReLU()
         self.apodo = apodo
 
     def forward(self, x, use_activation=True):
         x1 = self.fc1(x)  # Falta la activacion
-        x1 = self.activation(x1)  # Aplicar la activacion, relu porque es no lineal
+        x1 = self.activation(x1)  # Aplicamos la activacion
         x2 = self.fc2(x1)
 
         if use_activation:
@@ -39,7 +39,7 @@ class MultiLayerPerceptron(nn.Module):  # Hereda de nn.Module, es un requisito
         return x2
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # Para probar si el modelo funciona
     model = SimplePerceptron(1, 1)
     print(model)
     x = torch.tensor([1.0])

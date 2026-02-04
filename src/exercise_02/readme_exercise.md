@@ -95,7 +95,7 @@ Como estamos tratando con un problema de regresión, utilizaremos el error cuadr
 
 ### Descripción del conjunto de datos
 
-El conjunto de datos contiene 100 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real (y = -3x^2+5x).
+El conjunto de datos contiene 10.000 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real ($y = -3x^2 + 5x$).
 
 ### Preparación y preprocesamiento de datos
 
@@ -107,7 +107,7 @@ No se ha realizado ninguna ampliación de datos.
 
 ## Consideraciones del modelo
 
-Escribe tu respuesta aquí.
+Para la función $y = -3x^2 + 5x$, un modelo lineal (SinglePerceptron) no es suficiente. Por ello utilizamos un perceptrón multicapa (MultilayerPerceptron) con una capa oculta (fc1) y activación ReLU, y activación identidad en la última capa (regresión sin límites). Esto permite capturar la no linealidad de la función objetivo.
 
 ### Funciones de pérdida adecuadas [ESCRIBIR RESPUESTA]
 
@@ -128,7 +128,7 @@ El objetivo del entrenamiento es ajustar los pesos sinápticos del modelo para m
 
 ### Posibles arquitecturas
 
-Se utiliza una arquitectura de perceptrón simple como base. Esta arquitectura tiene dos parámetros: $W$ y $b$, y se aprenden durante el entrenamiento.
+Se utiliza una arquitectura de perceptrón multicapa (MultilayerPerceptron) con 64 neuronas en la capa oculta. Esta arquitectura tiene múltiples parámetros (pesos y sesgos en fc1 y fc2) que se aprenden durante el entrenamiento: $W_1, b_1$ en la capa oculta y $W_2, b_2$ en la capa de salida.
 
 ### Activación de la última capa
 
@@ -136,15 +136,15 @@ Como es una tarea de regresión sin límites inferiores ni superiores, la activa
 
 ### Otras consideraciones
 
-Añadir lo que consideremos oportuno
+Se usa `AdamW` como optimizador por su estabilidad y capacidad de convergencia. Para evitar saturar la salida, la última capa se deja sin activación (`Identity`).
 
 ## Entrenamiento
 
-El entrenamiento se ha realizado a lo largo de 100 épocas. El gráfico de la función de pérdida se muestra a continuación.
+El entrenamiento se ha realizado a lo largo de 200 épocas. El gráfico de la función de pérdida se muestra a continuación.
 
 ### Hiperparámetros de entrenamiento
 
-La tasa de aprendizaje se establece en 0,0001
+La tasa de aprendizaje se establece en 0,001
 
 ### Grafo de la función de pérdida
 
@@ -152,13 +152,13 @@ La tasa de aprendizaje se establece en 0,0001
 
 ### Discusión sobre el proceso de entrenamiento
 
-Escribe tu respuesta aquí.
+El loss de entrenamiento y validación disminuye rápidamente en las primeras épocas y luego se estabiliza. Las curvas se mantienen muy próximas, lo que indica buena generalización y ausencia de sobreajuste. El punto óptimo se alcanza alrededor de 200 épocas, donde la validación no mejora significativamente.
 
 ## Evaluación
 
 ### Métricas de evaluación
 
-Escribe tu respuesta aquí.
+Las métricas obtenidas muestran un rendimiento alto (que se puede observar en la tabla) en train/validation/test, y errores MAE/MSE consistentes entre conjuntos. Esto indica que el modelo explica la mayor parte de la variabilidad de los datos y generaliza correctamente.
 
 ![image](../../outs/exercise_02/train_regression_plot.png)
 
@@ -172,8 +172,7 @@ Las métricas de cada conjunto de datos se representan:
 
 ### Evaluación de los resultados
 
-Aquí tenéis ejemplos de resultados de evaluación para conjuntos de entrenamiento, validación y prueba.
-
+Imágenes de los resultados
 Ejemplo para el conjunto de entrenamiento:
 
 ![image](../../outs/exercise_02/train_data_points_plot.png)
@@ -189,15 +188,38 @@ Ejemplo para el conjunto de pruebas:
 ### Discusión de los resultados
 
 ¿Cómo resuelve el modelo el problema?
+
+El modelo aprende la forma cuadrática de la función objetivo y reproduce correctamente la curvatura en los datos.
+
 ¿Hay sobreajuste, subajuste o algún otro problema? 
+
+ No se observa sobreajuste importante, ya que train/validation/test son muy similares.
+
 ¿Cómo podemos mejorar el modelo?
+
+Para mejorar el modelo, se podría ajustar el número de neuronas o aplicar early stopping. Si se observa que el valor de Validation Test disminuye en las últimas épocas se podria subir el número de epocas.
+
 ¿Cómo se generalizará este modelo a nuevos datos?
+
+  Dado el alto $R^2$, se espera una buena generalización a nuevos datos generados con la misma distribución.
 
 ## Diseño de bucles de retroalimentación
 
 Describe el proceso que has seguido para mejorar el modelo y la evolución del rendimiento del modelo durante el proceso.
 
-Puedes incluir una tabla que indique los chanched parameters y los resultados obtenidos tras el proceso.
+Estrategia seguida:
+1. Primero aumentar el learning rate (x10) (coste computacional nulo). 
+2. Si no es suficiente, aumentar el número de épocas. (100-->200-->250)
+3. Como último recurso, aumentar el número de neuronas.
+
+Puedes incluir una tabla que indique los parámetros cambiados y los resultados obtenidos tras el proceso.
+
+| Cambio | Antes | Después | Impacto observado |
+|---|---|---|---|
+| Modelo | `SimplePerceptron` | `MultiLayerPerceptron` | Mejor ajuste de la curva (no linealidad) |
+| Neuronas ocultas | — | 64 | Mayor capacidad para aproximar $y = -3x^2 + 5x$ |
+| Learning rate | 0.0001 | 0.001 | Convergencia más rápida |
+| Épocas | 100 | 200 | Mejora del validation loss hasta estabilizar |
 
 ## Preguntas
 
@@ -205,4 +227,8 @@ Por favor, responde a las siguientes preguntas. Incluye gráficos si es necesari
 
 ### ¿Cuáles son las diferencias que encontraste entre el modelo anterior y este?
 
+El modelo anterior era lineal (perceptrón simple, suficiente para la función anterior) y no podía aprender una relación cuadrática, produciendo un subajuste claro. El modelo actual es un perceptrón multicapa con activación no lineal, capaz de aproximar funciones no lineales, logrando un $R^2$ muy alto y errores menores.
+
 ### ¿El modelo se generaliza bien a datos nuevos?
+
+Sí. Las métricas en train, validation y test son muy similares y el $R^2$ se mantiene alto en los tres conjuntos, lo que indica buena generalización.
