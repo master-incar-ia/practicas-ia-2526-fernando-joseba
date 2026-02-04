@@ -49,7 +49,7 @@ def train_model(output_folder: Path, device: torch.device):
     optimizer = optim.AdamW(model.parameters(), lr=0.001) # AdamW es el algoritmo de optimización y lr es la tasa de aprendizaje (learning rate)
 
     # Training loop with validation and saving best weights
-    num_epochs = 100 # Aumentamos de 100 a 200 porque el validation loss seguía bajando
+    num_epochs = 200 # Aumentamos de 100 a 200 por el validation loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
@@ -114,6 +114,9 @@ def train_model(output_folder: Path, device: torch.device):
     plt.savefig(output_folder / "loss_plot.png")
 
 if __name__ == "__main__":
+    # Set the seed for reproducibility
+    torch.manual_seed(42)
+
     # Create output folder based on file folder
     output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name  
     output_folder.mkdir(exist_ok=True, parents=True)
@@ -121,6 +124,3 @@ if __name__ == "__main__":
     device = get_device("auto") # choices are "auto", "cpu", "cuda"
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
-
-    # Set the seed for reproducibility
-    torch.manual_seed(42)
