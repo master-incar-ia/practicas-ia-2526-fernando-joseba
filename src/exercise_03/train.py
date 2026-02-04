@@ -63,7 +63,7 @@ def train_model(output_folder: Path, device: torch.device):
             # Forward pass
             inputs_cuda = inputs.to(device)
             targets_cuda = targets.to(device)
-            outputs = model(inputs_cuda) # outputs: y' (y gorro)
+            outputs = model(inputs_cuda, use_activation=False) # outputs: y' (y gorro)
             loss = criterion(outputs, targets_cuda)
 
             train_loss += loss.item()
@@ -124,3 +124,8 @@ if __name__ == "__main__":
     device = get_device("auto") # choices are "auto", "cpu", "cuda"
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
+
+
+    # con una relu y a 400 epocas el best validation es a 3711
+    # con dos relu y a 200 epocas el best validation es a 3294
+    # con dos relu, 128 neuronas y a 200 epocas el best validation es a 3294

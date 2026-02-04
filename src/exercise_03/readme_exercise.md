@@ -109,7 +109,7 @@ No se ha realizado ninguna ampliación de datos.
 
 Para la función $y = 100 · sin(8 · π · x / 100) + 2$, un modelo lineal (SinglePerceptron) no es suficiente, ya que solo puede representar relaciones lineales entre la entrada y la salida.
 
-Por este motivo se utiliza un perceptrón multicapa (MultiLayerPerceptron) con una capa oculta (fc1) y función de activación ReLU. Esta arquitectura permite introducir no linealidad en el modelo y capturar la forma sinusoidal de la función objetivo. En la última capa se utiliza una activación identidad, ya que se trata de una tarea de regresión y la salida no debe estar limitada a un rango concreto.
+Por este motivo se utiliza un perceptrón multicapa (MultiLayerPerceptron) con dos capas ocultas (fc1 y fc2) y función de activación ReLU. Esta arquitectura permite introducir no linealidad en el modelo y capturar la forma sinusoidal de la función objetivo. En la última capa se utiliza una activación identidad, ya que se trata de una tarea de regresión y la salida no debe estar limitada a un rango concreto.
 
 ### Funciones de pérdida adecuadas
 
