@@ -107,16 +107,16 @@ No se ha realizado ninguna ampliación de datos.
 
 ## Consideraciones del modelo
 
-Para la función $y = -3x^2 + 5x$, un modelo lineal (SinglePerceptron) no es suficiente. Por ello utilizamos un perceptrón multicapa (MultilayerPerceptron) con una capa oculta (fc1) y activación ReLU, y activación identidad en la última capa (regresión sin límites). Esto permite capturar la no linealidad de la función objetivo.
+Para la función $y = -3x^2 + 5x$, un modelo lineal (SinglePerceptron) no es suficiente. Por ello utilizamos un perceptrón multicapa (MultilayerPerceptron) con **dos capas ocultas** (fc1 y fc2, ambas con 64 neuronas) y activación ReLU, y activación identidad en la última capa (fc3) para regresión sin límites. La arquitectura es: **1 → 64 (ReLU) → 64 (ReLU) → 1**. Esto permite capturar mejor la no linealidad de la función objetivo cuadrática.
 
-### Funciones de pérdida adecuadas [ESCRIBIR RESPUESTA]
+### Funciones de pérdida adecuadas 
 
 La función de pérdida utilizada depende del tipo de problema:
 
 - En regresión no lineal, se emplea el error cuadrático medio (MSE).
 - En problemas de clasificación, se utiliza la entropía cruzada.
 
-### Función de Pérdida Seleccionada [ESCRIBIR RESPUESTA]
+### Función de Pérdida Seleccionada
 
 En esta tarea se utiliza la función de pérdida MSE (Mean Squared Error), ya que el problema planteado es un problema de regresión no lineal, en el que la salida del modelo es una variable continua.
 
@@ -128,7 +128,7 @@ El objetivo del entrenamiento es ajustar los pesos sinápticos del modelo para m
 
 ### Posibles arquitecturas
 
-Se utiliza una arquitectura de perceptrón multicapa (MultilayerPerceptron) con 64 neuronas en la capa oculta. Esta arquitectura tiene múltiples parámetros (pesos y sesgos en fc1 y fc2) que se aprenden durante el entrenamiento: $W_1, b_1$ en la capa oculta y $W_2, b_2$ en la capa de salida.
+Se utiliza una arquitectura de perceptrón multicapa (MultilayerPerceptron) con **dos capas ocultas de 64 neuronas cada una**. Esta arquitectura tiene múltiples parámetros (pesos y sesgos en fc1, fc2 y fc3) que se aprenden durante el entrenamiento: $W_1, b_1$ en la primera capa oculta, $W_2, b_2$ en la segunda capa oculta, y $W_3, b_3$ en la capa de salida.
 
 ### Activación de la última capa
 
@@ -140,11 +140,14 @@ Se usa `AdamW` como optimizador por su estabilidad y capacidad de convergencia. 
 
 ## Entrenamiento
 
-El entrenamiento se ha realizado a lo largo de 200 épocas. El gráfico de la función de pérdida se muestra a continuación.
+El entrenamiento se ha realizado a lo largo de **340 épocas**. El gráfico de la función de pérdida se muestra a continuación.
 
 ### Hiperparámetros de entrenamiento
 
-La tasa de aprendizaje se establece en 0,001
+- **Learning rate**: 0.0003
+- **Batch size**: 64
+- **Optimizador**: AdamW
+- **Épocas**: 340
 
 ### Grafo de la función de pérdida
 
@@ -208,18 +211,19 @@ Para mejorar el modelo, se podría ajustar el número de neuronas o aplicar earl
 Describe el proceso que has seguido para mejorar el modelo y la evolución del rendimiento del modelo durante el proceso.
 
 Estrategia seguida:
-1. Primero aumentar el learning rate (x10) (coste computacional nulo). 
-2. Si no es suficiente, aumentar el número de épocas. (100-->200-->250)
-3. Como último recurso, aumentar el número de neuronas.
+1. Añadir una segunda capa oculta (1→64→1 a 1→64→64→1) para aumentar la capacidad del modelo.
+2. Ajustar el learning rate para estabilidad (0.001 → 0.0003) tras observar picos en validation loss.
+3. Aumentar épocas progresivamente (100→200→300→340) hasta observar convergencia.
+4. Mantener batch_size=64 (bueno para dataset de 10,000 puntos).
 
 Puedes incluir una tabla que indique los parámetros cambiados y los resultados obtenidos tras el proceso.
 
 | Cambio | Antes | Después | Impacto observado |
 |---|---|---|---|
-| Modelo | `SimplePerceptron` | `MultiLayerPerceptron` | Mejor ajuste de la curva (no linealidad) |
-| Neuronas ocultas | — | 64 | Mayor capacidad para aproximar $y = -3x^2 + 5x$ |
-| Learning rate | 0.0001 | 0.001 | Convergencia más rápida |
-| Épocas | 100 | 200 | Mejora del validation loss hasta estabilizar |
+| Modelo | `SimplePerceptron` | `MultiLayerPerceptron` (3 capas) | Mejor ajuste de la curva (no linealidad) |
+| Capas ocultas | 1 capa (64 neuronas) | 2 capas (64 + 64 neuronas) | Mayor capacidad para aproximar $y = -3x^2 + 5x$ |
+| Learning rate | 0.001 (inestable) | 0.0003 | Convergencia más estable, sin picos |
+| Épocas | 100 → 200 → 300 | 340 | Mejora del validation loss hasta estabilizar |
 
 ## Preguntas
 
