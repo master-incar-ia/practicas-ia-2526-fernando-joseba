@@ -95,7 +95,7 @@ Como estamos tratando con un problema de regresión, utilizaremos el error cuadr
 
 ### Descripción del conjunto de datos
 
-El conjunto de datos contiene 10000 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real ($y = 100sin(8*pi*x/100) + 2$).
+El conjunto de datos contiene 10000 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real ($y = 100 · sin(8 · π · x / 100) + 2$).
 
 ### Preparación y preprocesamiento de datos
 
@@ -105,9 +105,11 @@ No se ha realizado ningún preprocesado. El conjunto de datos se ha dividido en 
 
 No se ha realizado ninguna ampliación de datos.
 
-## Consideraciones del modelo [CAMBIARLO]
+## Consideraciones del modelo
 
-Para la función $y = -3x^2 + 5x$, un modelo lineal (SinglePerceptron) no es suficiente. Por ello utilizamos un perceptrón multicapa (MultilayerPerceptron) con una capa oculta (fc1) y activación ReLU, y activación identidad en la última capa (regresión sin límites). Esto permite capturar la no linealidad de la función objetivo.
+Para la función $y = 100 · sin(8 · π · x / 100) + 2$, un modelo lineal (SinglePerceptron) no es suficiente, ya que solo puede representar relaciones lineales entre la entrada y la salida.
+
+Por este motivo se utiliza un perceptrón multicapa (MultiLayerPerceptron) con una capa oculta (fc1) y función de activación ReLU. Esta arquitectura permite introducir no linealidad en el modelo y capturar la forma sinusoidal de la función objetivo. En la última capa se utiliza una activación identidad, ya que se trata de una tarea de regresión y la salida no debe estar limitada a un rango concreto.
 
 ### Funciones de pérdida adecuadas
 

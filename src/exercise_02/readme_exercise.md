@@ -209,9 +209,10 @@ Para mejorar el modelo, se podría ajustar el número de neuronas o aplicar earl
 Describe el proceso que has seguido para mejorar el modelo y la evolución del rendimiento del modelo durante el proceso.
 
 Estrategia seguida:
-1. Primero aumentar el learning rate (x10) (coste computacional nulo). 
-2. Si no es suficiente, aumentar el número de épocas. (100-->200-->250)
-3. Como último recurso, aumentar el número de neuronas.
+1. Cambiar el modelo lineal a un perceptrón multicapa para introducir no linealidad.
+2. Ajustar la tasa de aprendizaje para mejorar la convergencia.
+3. Aumentar el número de épocas mientras la pérdida de validación seguía mejorando.
+4. Ajustar el número de neuronas como control de capacidad del modelo.
 
 Puedes incluir una tabla que indique los parámetros cambiados y los resultados obtenidos tras el proceso.
 
