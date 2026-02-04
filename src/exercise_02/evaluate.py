@@ -1,3 +1,5 @@
+# Script de evaluación y generación de gráficos
+
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -19,7 +21,7 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder):
 
     with torch.no_grad():  # Desactivar el cálculo de gradientes para ir más rápido
         for inputs, targets in loader:
-            outputs = model(inputs, use_activation=False)
+            outputs = model(inputs, use_activation=False) # La última capa no tiene activación
             all_inputs.append(inputs.numpy())
             all_outputs.append(outputs.numpy())
             all_targets.append(targets.numpy())

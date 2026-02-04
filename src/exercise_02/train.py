@@ -1,3 +1,5 @@
+# Script de entrenamiento
+
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -7,8 +9,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
-from .dataset import NoisyRegressionDataset
-from .model import MultiLayerPerceptron
+from dataset import NoisyRegressionDataset
+from model import MultiLayerPerceptron
 
 
 def get_device(force: str = "auto") -> torch.device:
@@ -32,9 +34,7 @@ def train_model(output_folder: Path, device: torch.device):
     train_size = int(0.7 * len(dataset))
     val_size = int(0.15 * len(dataset))
     test_size = len(dataset) - train_size - val_size
-    train_dataset, val_dataset, test_dataset = random_split(
-        dataset, [train_size, val_size, test_size]
-    )
+    train_dataset, val_dataset, test_dataset = random_split(dataset, [train_size, val_size, test_size])
 
     # Create DataLoaders for the datasets
     pin_memory = True if device.type == "cuda" else False
@@ -46,10 +46,10 @@ def train_model(output_folder: Path, device: torch.device):
     output_dim = 1
     model = MultiLayerPerceptron(input_dim, output_dim, num_hidden_neurons=64, apodo="exercise_02").to(device)
     criterion = nn.MSELoss()
-    optimizer = optim.AdamW(model.parameters(), lr=0.001)
+    optimizer = optim.AdamW(model.parameters(), lr=0.001) # AdamW es el algoritmo de optimización y lr es la tasa de aprendizaje (learning rate)
 
     # Training loop with validation and saving best weights
-    num_epochs = 200 # Aumentamos de 100 a 250 porque el validation loss seguía bajando
+    num_epochs = 200 # Aumentamos de 100 a 200 porque el validation loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 

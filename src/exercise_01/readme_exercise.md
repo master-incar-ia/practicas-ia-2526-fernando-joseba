@@ -117,7 +117,7 @@ Como estamos tratando con un problema de regresión, utilizaremos el error cuadr
 
 ### Descripción del conjunto de datos
 
-El conjunto de datos contiene 100 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real (y = 5x + 2).
+El conjunto de datos contiene 10000 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real (y = 5x + 2).
 
 ### Preparación y preprocesamiento de datos
 

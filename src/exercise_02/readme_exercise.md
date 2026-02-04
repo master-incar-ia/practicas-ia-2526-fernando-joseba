@@ -95,7 +95,7 @@ Como estamos tratando con un problema de regresión, utilizaremos el error cuadr
 
 ### Descripción del conjunto de datos
 
-El conjunto de datos contiene 10.000 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real ($y = -3x^2 + 5x$).
+El conjunto de datos contiene 10000 puntos de datos ruidosos con una desviación estándar de ruido de 20 respecto a la función real ($y = -3x^2 + 5x$).
 
 ### Preparación y preprocesamiento de datos
 
@@ -109,14 +109,14 @@ No se ha realizado ninguna ampliación de datos.
 
 Para la función $y = -3x^2 + 5x$, un modelo lineal (SinglePerceptron) no es suficiente. Por ello utilizamos un perceptrón multicapa (MultilayerPerceptron) con una capa oculta (fc1) y activación ReLU, y activación identidad en la última capa (regresión sin límites). Esto permite capturar la no linealidad de la función objetivo.
 
-### Funciones de pérdida adecuadas [ESCRIBIR RESPUESTA]
+### Funciones de pérdida adecuadas
 
 La función de pérdida utilizada depende del tipo de problema:
 
 - En regresión no lineal, se emplea el error cuadrático medio (MSE).
 - En problemas de clasificación, se utiliza la entropía cruzada.
 
-### Función de Pérdida Seleccionada [ESCRIBIR RESPUESTA]
+### Función de Pérdida Seleccionada
 
 En esta tarea se utiliza la función de pérdida MSE (Mean Squared Error), ya que el problema planteado es un problema de regresión no lineal, en el que la salida del modelo es una variable continua.
 
