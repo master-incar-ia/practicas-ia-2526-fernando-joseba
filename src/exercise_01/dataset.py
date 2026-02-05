@@ -12,7 +12,7 @@ from torch.utils.data import Dataset
 
 class NoisyRegressionDataset(Dataset):
     """
-    Genera datos con ruido siguiendo la ecuación:
+    Genera el dataset con ruido siguiendo la ecuación:
     y = 5*x + 2 + delta
     donde delta es ruido gaussiano con desviación estándar `noise_std`
     """

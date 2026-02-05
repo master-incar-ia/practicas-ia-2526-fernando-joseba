@@ -1,8 +1,5 @@
 # Define el dataset de regresión con ruido cuadrático
-<<<<<<< HEAD
-=======
 
->>>>>>> 4b33e73ee15c86f46276d05c29f8f1364892c72f
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -19,10 +16,7 @@ class NoisyRegressionDataset(Dataset):
     y = -3*x^2 + 5*x + delta
     donde delta es ruido gaussiano con desviación estándar `noise_std`
     """
-<<<<<<< HEAD
-=======
-    
->>>>>>> 4b33e73ee15c86f46276d05c29f8f1364892c72f
+
     def __init__(self, noise_std=20, size=100, seed=42):
         np.random.seed(seed)
         self.x = np.random.uniform(0, 100, size=(size,))
@@ -38,24 +32,14 @@ class NoisyRegressionDataset(Dataset):
         self.y = self.y.reshape((-1, 1))
 
     def plot(self, filepath):
-<<<<<<< HEAD
-        # Guarda un plot del dataset
-        ax = sns.scatterplot(self.df, x="x", y="y")
-        ax.set_title("Synthetic noisy data of y=-3*x^2 + 5*x + delta")
-=======
         # Guardar la gráfica de los datos
         ax = sns.scatterplot(self.df, x="x", y="y")
         ax.set_title("Synthetic noisy data of y=-3*x^2+5*x")
->>>>>>> 4b33e73ee15c86f46276d05c29f8f1364892c72f
         plt.savefig(filepath)
         plt.show()
 
     def __len__(self):
-<<<<<<< HEAD
-        #Para que sea compatible con Pytorch DataLoader
-=======
         # Para que sea compatible con PyTorch Dataset
->>>>>>> 4b33e73ee15c86f46276d05c29f8f1364892c72f
         return len(self.x)
 
     def __getitem__(self, idx):

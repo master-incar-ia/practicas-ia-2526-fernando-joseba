@@ -99,8 +99,10 @@ def save_metrics_as_picture(metrics, filepath):
 if __name__ == "__main__":
     output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
     output_folder.mkdir(exist_ok=True, parents=True)
+
     # Set the seed for reproducibility
     torch.manual_seed(42)
+    
     # Create an instance of the dataset
     dataset = NoisyRegressionDataset(size=10000)
 

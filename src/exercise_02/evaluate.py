@@ -97,8 +97,10 @@ def save_metrics_as_picture(metrics, filepath):
 if __name__ == "__main__":
     output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
     output_folder.mkdir(exist_ok=True, parents=True)
+
     # Set the seed for reproducibility
     torch.manual_seed(42)
+    
     # Create an instance of the dataset
     dataset = NoisyRegressionDataset(size=10000)
 
@@ -116,9 +118,8 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=10, shuffle=False)
 
     # Load the best model weights
-    model = MultiLayerPerceptron(
-        input_dim=1, output_dim=1, num_hidden_neurons=64, apodo="exercise_02"
-    )
+    model = MultiLayerPerceptron(input_dim=1, output_dim=1, num_hidden_neurons=64, apodo="exercise_02")
+    
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
 
     metrics = {}

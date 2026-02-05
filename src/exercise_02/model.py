@@ -25,12 +25,9 @@ class MultiLayerPerceptron(nn.Module):  # Hereda de nn.Module, es un requisito
     Modelo de perceptrón multicapa: tres capas lineales y activaciones ReLU
     """
     def __init__(
-        self, input_dim, output_dim, num_hidden_neurons, apodo
-    ):  # Parametros de entrada y salida
+        self, input_dim, output_dim, num_hidden_neurons, apodo):  # Parametros de entrada y salida
         super().__init__()  # es necesario
-        self.fc1 = nn.Linear(
-            input_dim, num_hidden_neurons
-        )  # Modelo lineal , añade capa lineal del perceptron, "primera capa oculta"
+        self.fc1 = nn.Linear(input_dim, num_hidden_neurons)  # Modelo lineal , añade capa lineal del perceptron, "primera capa oculta"
         self.fc2 = nn.Linear(num_hidden_neurons, num_hidden_neurons)  # Segunda capa oculta
         self.fc3 = nn.Linear(num_hidden_neurons, output_dim)  # Capa de salida
         self.activation = nn.ReLU()
