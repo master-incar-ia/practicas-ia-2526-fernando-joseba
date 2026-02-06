@@ -21,7 +21,7 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder):
 
     with torch.no_grad():  # Desactivar el cálculo de gradientes para ir más rápido
         for inputs, targets in loader:
-            outputs = model(inputs, use_activation=False) # La última capa no tiene activación
+            outputs = model(inputs)
             all_inputs.append(inputs.numpy())
             all_outputs.append(outputs.numpy())
             all_targets.append(targets.numpy())
@@ -38,9 +38,7 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder):
     )
 
     # Calculate r2, MAE and MSE
-    r2 = 1 - np.sum((all_targets - all_outputs) ** 2) / np.sum(
-        (all_targets - np.mean(all_targets)) ** 2
-    )
+    r2 = 1 - np.sum((all_targets - all_outputs) ** 2) / np.sum((all_targets - np.mean(all_targets)) ** 2)  # Coeficiente de determinación
     mae = np.mean(np.abs(all_targets - all_outputs))  # Media de la resta de los valores absolutos
     mse = np.mean((all_targets - all_outputs) ** 2)  # Media de la resta al cuadrado
 
@@ -65,7 +63,7 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder):
     sns.scatterplot(data=df, x="x", y="y_true", label="True")
     sns.scatterplot(data=df, x="x", y="y_pred", label="Predicted")
     plt.xlabel("x")
-    plt.ylabel("y")  # Adding y label
+    plt.ylabel("y")
     plt.title(f"Data points for {dataset_name} dataset")
     plt.legend()
     plt.savefig(f"{output_folder}/{dataset_name}_data_points_plot.png")
@@ -95,14 +93,14 @@ def save_metrics_as_picture(metrics, filepath):
 
 
 if __name__ == "__main__":
-    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
-    output_folder.mkdir(exist_ok=True, parents=True)
-    
     # Set the seed for reproducibility
     torch.manual_seed(42)
 
+    output_folder = Path(__file__).parent.parent.parent / "outs" / Path(__file__).parent.name
+    output_folder.mkdir(exist_ok=True, parents=True)
+
     # Create an instance of the dataset
-    dataset = NoisyRegressionDataset(size=10000)
+    dataset = NoisyRegressionDataset()
 
     # Split the dataset into train, validation, and test sets
     train_size = int(0.7 * len(dataset))
@@ -118,9 +116,7 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=10, shuffle=False)
 
     # Load the best model weights
-    model = MultiLayerPerceptron(
-        input_dim=1, output_dim=1, num_hidden_neurons=128, apodo="exercise_03"
-    )
+    model = MultiLayerPerceptron(input_dim=1, output_dim=1, num_hidden_neurons=128, apodo="exercise_03")
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
 
     metrics = {}

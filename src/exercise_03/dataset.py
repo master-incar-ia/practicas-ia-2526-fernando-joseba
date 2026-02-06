@@ -18,30 +18,26 @@ class NoisyRegressionDataset(Dataset):
     y = 100*sin(8*pi*x/100) + 2 + delta
     donde delta es ruido gaussiano con desviación estándar `noise_std`
     """
-    def __init__(self, noise_std=20, size=100, seed=42):
+    def __init__(self, noise_std=20, size=10000, seed=42):
         np.random.seed(seed)
 
-        # 1. Generar x original
-        x_raw = np.random.uniform(0, 100, size=(size,))
+        # Se ha normalizado la variable de entrada x para reducir su escala y facilitar un entrenamiento más estable y eficiente del modelo, sin alterar la forma de la función objetivo que se desea aprender.
 
-        # 2. Normalizar SOLO para el modelo
-        x_norm = x_raw / 100.0
+        x_raw = np.random.uniform(0, 100, size=(size,)) # Entrada original
+        x_norm = x_raw / 100.0 # Entrada normalizada
 
-        # 3. Generar y usando x ORIGINAL
-        y = 100 * np.sin(8 * np.pi * x_raw / 100) + 2
-        y += np.random.normal(0, noise_std, size=(size,))
-
+        y = 100 * np.sin(8 * np.pi * x_raw / 100) + 2 # Salida sin ruido
+        y += np.random.normal(0, noise_std, size=(size,)) # Salida con ruido
 
         self.x = x_norm
         self.y = y
-
-
         """
+        ESTE ES EL CÓDIGO ORIGINAL
+
         self.x = np.random.uniform(0, 100, size=(size,))
         self.delta = np.random.normal(0, noise_std, size=(size,))
         self.y = 100 * np.sin(8 * numpy.pi * self.x / 100) + 2 + self.delta
         """
-
 
         # Create a DataFrame for visualization
         df = pd.DataFrame(data=np.array([self.x, self.y]).transpose(), columns=["x", "y"])
@@ -65,9 +61,7 @@ class NoisyRegressionDataset(Dataset):
     def __getitem__(self, idx):
         # Para que sea compatible con PyTorch Dataset
         # return self.x[idx], self.y[idx] # Se puede hacer así, pero es mejor usar tensores de torch
-        return torch.tensor(self.x[idx], dtype=torch.float32), torch.tensor(
-            self.y[idx], dtype=torch.float32
-        )
+        return torch.tensor(self.x[idx], dtype=torch.float32), torch.tensor(self.y[idx], dtype=torch.float32)
 
 
 if __name__ == "__main__":

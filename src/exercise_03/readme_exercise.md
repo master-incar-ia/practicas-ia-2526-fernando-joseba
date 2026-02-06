@@ -208,3 +208,17 @@ Por favor, responde a las siguientes preguntas. Incluye gráficos si es necesari
 ### ¿Cuáles son las diferencias que encontraste entre el modelo anterior y este?
 
 ### ¿El modelo se generaliza bien a datos nuevos?
+
+
+
+    # con una relu y a 400 epocas el best validation es a 3711
+    # con dos relu y a 200 epocas el best validation es a 3294
+    # con dos relu, 128 neuronas y a 200 epocas el best validation es a 3294
+    # si está normalizada el validation loss baja a 2425 con 200 epocas y 64 neuronas
+    # No se van a poner 128 neuronas porque no merece la pena
+    # 2415 con 300 epocas
+    # 2398 con 400 epocas
+    # 672 con 400 epocas y 128 neuronas
+    # 672 con 500 epocas y 128 neuronas
+
+    # las 128 neuronas están en fila

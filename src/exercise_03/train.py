@@ -28,7 +28,7 @@ def get_device(force: str = "auto") -> torch.device:
 
 def train_model(output_folder: Path, device: torch.device):
     # Create an instance of the dataset
-    dataset = NoisyRegressionDataset(size=10000)
+    dataset = NoisyRegressionDataset()
 
     # Split the dataset into train, validation, and test sets
     train_size = int(0.7 * len(dataset))
@@ -45,11 +45,11 @@ def train_model(output_folder: Path, device: torch.device):
     input_dim = 1
     output_dim = 1
     model = MultiLayerPerceptron(input_dim, output_dim, num_hidden_neurons=128, apodo="exercise_03").to(device)
-    criterion = nn.MSELoss()
+    criterion = nn.MSELoss() # Función de pérdida. Se usa el MSE porque es un problema de regresión, no de clasificación
     optimizer = optim.AdamW(model.parameters(), lr=0.001) # AdamW es el algoritmo de optimización y lr es la tasa de aprendizaje (learning rate)
 
     # Training loop with validation and saving best weights
-    num_epochs = 400 # Aumentamos de 100 a 200 por el validation loss seguía bajando
+    num_epochs = 400 # Aumentamos de 100 a 400 porque el loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
@@ -64,7 +64,7 @@ def train_model(output_folder: Path, device: torch.device):
             inputs_cuda = inputs.to(device)
             targets_cuda = targets.to(device)
             outputs = model(inputs_cuda, use_activation=False) # outputs: y' (y gorro)
-            loss = criterion(outputs, targets_cuda)
+            loss = criterion(outputs, targets_cuda) # Pérdida
 
             train_loss += loss.item()
 
@@ -90,6 +90,7 @@ def train_model(output_folder: Path, device: torch.device):
         val_loss /= len(val_loader)
         val_losses.append(val_loss)
 
+        # Guardar el mejor modelo
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             torch.save(model.state_dict(), best_model_path)
@@ -124,15 +125,3 @@ if __name__ == "__main__":
     device = get_device("auto") # choices are "auto", "cpu", "cuda"
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
-
-
-    # con una relu y a 400 epocas el best validation es a 3711
-    # con dos relu y a 200 epocas el best validation es a 3294
-    # con dos relu, 128 neuronas y a 200 epocas el best validation es a 3294
-    # si está normalizada el validation loss baja a 2425 con 200 epocas y 64 neuronas
-    # No se van a poner 128 neuronas porque no merece la pena
-    # 2415 con 300 epocas
-    # 2398 con 400 epocas
-    # 672 con 400 epocas y 128 neuronas
-
-    # las 128 neuronas están en fila
