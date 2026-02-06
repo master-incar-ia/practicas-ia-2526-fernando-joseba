@@ -23,6 +23,7 @@ class SimplePerceptron(nn.Module): # Hereda de nn.Module, es un requisito
 class MultiLayerPerceptron(nn.Module):  # Hereda de nn.Module, es un requisito
     """
     Modelo de perceptrón multicapa: tres capas lineales y activaciones ReLU
+    entrada -> fc1 -> ReLU -> fc2 -> ReLU -> fc3 -> salida
     """
     def __init__(
         self, input_dim, output_dim, num_hidden_neurons, apodo):  # Parametros de entrada y salida
@@ -34,7 +35,7 @@ class MultiLayerPerceptron(nn.Module):  # Hereda de nn.Module, es un requisito
         self.apodo = apodo
 
     def forward(self, x, use_activation=True):
-        x1 = self.fc1(x)  # Primera capa
+        x1 = self.fc1(x)  # Primera capa oculta
         x1 = self.activation(x1)  # Aplicamos la activacion
         x2 = self.fc2(x1)  # Segunda capa oculta
         x2 = self.activation(x2)  # Aplicamos la activacion
