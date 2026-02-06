@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
     # Load the best model weights
     model = MultiLayerPerceptron(
-        input_dim=1, output_dim=1, num_hidden_neurons=64, apodo="exercise_03"
+        input_dim=1, output_dim=1, num_hidden_neurons=128, apodo="exercise_03"
     )
     model.load_state_dict(torch.load(output_folder / "best_model.pth"))
 

@@ -20,9 +20,29 @@ class NoisyRegressionDataset(Dataset):
     """
     def __init__(self, noise_std=20, size=100, seed=42):
         np.random.seed(seed)
+
+        # 1. Generar x original
+        x_raw = np.random.uniform(0, 100, size=(size,))
+
+        # 2. Normalizar SOLO para el modelo
+        x_norm = x_raw / 100.0
+
+        # 3. Generar y usando x ORIGINAL
+        y = 100 * np.sin(8 * np.pi * x_raw / 100) + 2
+        y += np.random.normal(0, noise_std, size=(size,))
+
+
+        self.x = x_norm
+        self.y = y
+
+
+        """
         self.x = np.random.uniform(0, 100, size=(size,))
         self.delta = np.random.normal(0, noise_std, size=(size,))
         self.y = 100 * np.sin(8 * numpy.pi * self.x / 100) + 2 + self.delta
+        """
+
+
         # Create a DataFrame for visualization
         df = pd.DataFrame(data=np.array([self.x, self.y]).transpose(), columns=["x", "y"])
         self.df = df
