@@ -40,11 +40,15 @@ if __name__ == "__main__":
 
     # Data augmentation
     transform = transforms.Compose(
-        [transforms.ToTensor(), transforms.Normalize((0.0, 0.0, 0.0), (1.0, 1.0, 1.0))]
+        [transforms.ToTensor(), # La convierte en tensor y luego normaliza los valores a [0, 1]
+         transforms.Normalize((0.0, 0.0, 0.0), (1.0, 1.0, 1.0))]
     )
 
-    dataset_train = CIFAR10Dataset("./data", train=True, transform=transform)
+    dataset_train = CIFAR10Dataset("./data", train=True, transform=transform) # Devuelve un número entre 0 y 9, que es la clase a la que pertenece la imagen, pero lo ideal es que lo haga con valores de 0 y 1
     dataset_test = CIFAR10Dataset("./data", train=False, transform=transform)
     print(f"Dataset length: {len(dataset_train)}")
     print(f"First item: {dataset_train[0]}")
     dataset_train.plot(output_folder / "plot_dataset_example.png")
+
+    # En el evaluate.py hay que hacer una matriz de confusión, no hace falta que tenga porcentajes, pero sí hay que sacar las métricas. 
+    # En la 5 es más de lo mismo 
