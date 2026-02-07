@@ -44,7 +44,7 @@ def train_model(output_folder: Path, device: torch.device):
     # Define the model, loss function, and optimizer
     input_dim = 1
     output_dim = 1
-    model = MultiLayerPerceptron(input_dim, output_dim, num_hidden_neurons=128, apodo="exercise_03").to(device)
+    model = MultiLayerPerceptron(input_dim, output_dim, num_hidden_neurons=128, apodo="exercise_03").to(device) # Las 128 neuronas están en fila
     criterion = nn.MSELoss() # Función de pérdida. Se usa el MSE porque es un problema de regresión, no de clasificación
     optimizer = optim.AdamW(model.parameters(), lr=0.001) # AdamW es el algoritmo de optimización y lr es la tasa de aprendizaje (learning rate)
 

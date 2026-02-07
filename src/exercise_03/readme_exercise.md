@@ -128,25 +128,35 @@ $$\text{MSE} = \frac{1}{N} \sum_{i=1}^{N} (y_i - y'_i)^2$$
 
 El objetivo del entrenamiento es ajustar los pesos sinápticos del modelo para minimizar esta función de pérdida mediante un algoritmo de optimización basado en gradiente descendente.
 
-### Posibles arquitecturas [CAMBIARLO]
+### Posibles arquitecturas
 
-Se utiliza una arquitectura de perceptrón multicapa (MultilayerPerceptron) con 64 neuronas en la capa oculta. Esta arquitectura tiene múltiples parámetros (pesos y sesgos en fc1 y fc2) que se aprenden durante el entrenamiento: $W_1, b_1$ en la capa oculta y $W_2, b_2$ en la capa de salida.
+Para problemas de **regresión no lineal** existen distintas arquitecturas posibles:
+
+- Modelo lineal (perceptrón simple): este tipo de modelo solo puede representar relaciones lineales entre la entrada y la salida. Por tanto, no es adecuado para funciones no lineales como una función sinusoidal, ya que no puede capturar cambios periódicos ni curvaturas en los datos.
+
+- Perceptrón multicapa (MLP): los modelos con una o más capas ocultas y funciones de activación no lineales permiten aproximar funciones no lineales complejas. Un MLP con activaciones no lineales es un aproximador universal, por lo que resulta adecuado para modelar funciones continuas.
+
+Dado que la función objetivo presenta un comportamiento claramente no lineal y periódico, la arquitectura más indicada es un perceptrón multicapa con capas ocultas y activaciones no lineales, manteniendo una activación identidad en la capa de salida al tratarse de un problema de regresión.
 
 ### Activación de la última capa
 
-Como es una tarea de regresión sin límites inferiores ni superiores, la activación de la última capa se establece en función Identidad.
+Al tratarse de una tarea de regresión, en la que la variable de salida no está acotada por límites inferiores ni superiores, se utiliza una función de activación identidad en la última capa. De este modo, el modelo puede predecir valores reales sin restricciones en su rango.
 
-### Otras consideraciones [CAMBIARLO]
+### Otras consideraciones
 
-Se usa `AdamW` como optimizador por su estabilidad y capacidad de convergencia. Para evitar saturar la salida, la última capa se deja sin activación (`Identity`).
+La entrada x se ha normalizado para mejorar la estabilidad del entrenamiento y facilitar la optimización. Al trabajar con valores en un rango reducido, el descenso por gradiente converge de forma más suave y estable, lo que se refleja en una reducción clara de la función de pérdida.
 
-## Entrenamiento [CAMBIARLO]
+La salida no se normaliza, ya que el modelo aprende directamente la escala real de la variable objetivo y los resultados se interpretan en unidades originales.
 
-El entrenamiento se ha realizado a lo largo de 200 épocas. El gráfico de la función de pérdida se muestra a continuación.
+Se utiliza el optimizador AdamW debido a su estabilidad durante el entrenamiento y a su buena capacidad de convergencia. Al tratarse de una tarea de regresión sin restricciones en el rango de salida, la última capa se mantiene sin función de activación, utilizando una función identidad.
 
-### Hiperparámetros de entrenamiento [CAMBIARLO]
+## Entrenamiento
 
-La tasa de aprendizaje se establece en 0,0001
+El entrenamiento se ha realizado a lo largo de 400 épocas. El gráfico de la función de pérdida se muestra a continuación.
+
+### Hiperparámetros de entrenamiento
+
+La tasa de aprendizaje se establece en 0.001. El entrenamiento se realiza durante 400 épocas, utilizando un batch size de 10. El modelo emplea dos capas ocultas con un número 128 de neuronas por capa.
 
 ### Grafo de la función de pérdida
 
@@ -154,13 +164,26 @@ La tasa de aprendizaje se establece en 0,0001
 
 ### Discusión sobre el proceso de entrenamiento [CAMBIARLO]
 
-El loss de entrenamiento y validación disminuye rápidamente en las primeras épocas y luego se estabiliza. Las curvas se mantienen muy próximas, lo que indica buena generalización y ausencia de sobreajuste. El punto óptimo se alcanza alrededor de 200 épocas, donde la validación no mejora significativamente.
+### Discusión sobre el proceso de entrenamiento
+
+Durante el entrenamiento se observa una disminución progresiva de la función de pérdida tanto en el conjunto de entrenamiento como en el de validación. En las primeras épocas la pérdida desciende de forma más pronunciada, mientras que a medida que avanza el entrenamiento la mejora se vuelve más gradual, lo que indica una convergencia estable del modelo.
+
+Las curvas de entrenamiento y validación muestran un comportamiento similar y no se separan de forma significativa, lo que sugiere que el modelo no presenta sobreajuste. La normalización de la entrada contribuye a una evolución más suave de la pérdida y a una mayor estabilidad del proceso de optimización.
+
+A partir de 400 épocas la mejora en la pérdida de validación es limitada, por lo que aumentar el número de épocas no produce una ganancia significativa. Por este motivo, el entrenamiento se detiene, seleccionando el modelo con mejor rendimiento en el conjunto de validación.
+
 
 ## Evaluación
 
 ### Métricas de evaluacións
 
-Escribe tu respuesta aquí.
+Para evaluar el rendimiento del modelo se utiliza: MSE (Mean Squared Error), MAE (Mean Absolute Error) y el coeficiente de determinación R^2. Estas métricas permiten analizar tanto la magnitud del error como la capacidad del modelo para explicar la variabilidad de los datos.
+
+El MSE penaliza con mayor peso los errores grandes y resulta adecuado para analizar el ajuste global del modelo. El MAE proporciona una medida más directa del error medio cometido, mientras que el coeficiente R^2 indica qué proporción de la variabilidad de la variable objetivo es explicada por el modelo.
+
+Las gráficas de regresión para los conjuntos de entrenamiento, validación y prueba muestran que el modelo es capaz de capturar la tendencia global de la función sinusoidal. Aunque existe dispersión debida al ruido presente en los datos, las predicciones se alinean razonablemente con los valores reales en los tres conjuntos.
+
+La similitud entre los resultados obtenidos en entrenamiento, validación y test indica que el modelo generaliza correctamente y no presenta un sobreajuste significativo.
 
 ![image](../../outs/exercise_03/train_regression_plot.png)
 
@@ -191,9 +214,20 @@ Ejemplo para el conjunto de pruebas:
 ### Discusión de los resultados
 
 ¿Cómo resuelve el modelo el problema?
-¿Hay sobreajuste, subajuste o algún otro problema? 
+
+El modelo resuelve el problema aproximando la relación no lineal entre la entrada y la salida mediante un perceptrón multicapa con funciones de activación ReLU. La red es capaz de capturar la tendencia global de la función sinusoidal, suavizando el ruido presente en los datos y ajustando correctamente la forma general de la señal.
+
+¿Hay sobreajuste, subajuste o algún otro problema?
+
+No se observa un sobreajuste significativo, ya que el comportamiento de la función de pérdida y las métricas obtenidas en los conjuntos de entrenamiento, validación y prueba son similares. Tampoco se aprecia un subajuste claro, dado que el modelo aprende la estructura no lineal de los datos. La dispersión residual se debe principalmente al ruido añadido al conjunto de datos.
+
 ¿Cómo podemos mejorar el modelo?
+
+El modelo podría mejorarse aumentando su capacidad, por ejemplo mediante más capas ocultas o un mayor número de neuronas, o ajustando los hiperparámetros de entrenamiento. No obstante, los experimentos realizados muestran que estas mejoras tienen un impacto limitado.
+
 ¿Cómo se generalizará este modelo a nuevos datos?
+
+Dado que las métricas obtenidas en el conjunto de prueba son comparables a las de entrenamiento y validación, se espera que el modelo generalice correctamente a nuevos datos generados a partir de la misma distribución. La capacidad de generalización está respaldada por el uso de un conjunto de validación durante el entrenamiento y por la ausencia de diferencias significativas entre los distintos conjuntos.
 
 ## Diseño de bucles de retroalimentación
 
@@ -201,24 +235,39 @@ Describe el proceso que has seguido para mejorar el modelo y la evolución del r
 
 Puedes incluir una tabla que indique los chanched parameters y los resultados obtenidos tras el proceso.
 
+El proceso de mejora del modelo se ha realizado de forma iterativa, utilizando el conjunto de validación como referencia para evaluar el impacto de los cambios introducidos. En una primera fase se empleó una arquitectura sencilla con una sola capa oculta y activación ReLU, observándose que el modelo no era capaz de ajustar adecuadamente la función objetivo.
+
+Posteriormente, se aumentó la complejidad del modelo incorporando una segunda capa oculta, lo que permitió reducir la pérdida de validación. Sin embargo, incrementar el número de neuronas por capa no produjo una mejora significativa en este punto, por lo que se descartó esta opción inicialmente.
+
+La mejora más relevante se obtuvo al introducir la normalización de la entrada. Este cambio permitió una reducción clara de la función de pérdida y una evolución más estable del entrenamiento. A partir de este punto, aumentar el número de épocas produjo mejoras progresivas en validación, hasta alcanzar un valor de pérdida considerablemente menor.
+
+Finalmente, se comprobó que el perceptrón simple no era capaz de seguir la forma sinusoidal de la función, confirmando que una arquitectura lineal no es adecuada para este problema.
+
+La siguiente tabla resume los principales cambios realizados y los resultados obtenidos en cada iteración.
+
+| Arquitectura / Cambios                   | Épocas | Neuronas | Normalización | Best val loss |
+|------------------------------------------|--------|----------|---------------|---------------|
+| 1 capa oculta                            | 400    | 64       | No            | 3711          |
+| 2 capas ocultas                          | 200    | 64       | No            | 3294          |
+| 2 capas ocultas                          | 200    | 128      | No            | 3294          |
+| 2 capas ocultas                          | 200    | 64       | Sí            | 2425          |
+| 2 capas ocultas                          | 300    | 64       | Sí            | 2415          |
+| 2 capas ocultas                          | 400    | 64       | Sí            | 2398          |
+| 2 capas ocultas                          | 400    | 128      | Sí            | 672           |
+| 2 capas ocultas                          | 500    | 128      | Sí            | 672           |
+
 ## Preguntas
 
 Por favor, responde a las siguientes preguntas. Incluye gráficos si es necesario. Almacenar los gráficos en la carpeta `outs/exercise_03`.
 
 ### ¿Cuáles son las diferencias que encontraste entre el modelo anterior y este?
 
+La principal diferencia entre el modelo anterior y el actual es la capacidad para modelar relaciones no lineales. Mientras que el modelo anterior, más simple, no era capaz de seguir adecuadamente la forma sinusoidal de la función objetivo, el modelo actual, basado en un perceptrón multicapa con activaciones ReLU, consigue aproximar la tendencia global de la señal.
+
+Además, la normalización de la entrada en este ejercicio ha tenido un impacto significativo en el rendimiento del modelo, permitiendo una reducción clara de la función de pérdida y un entrenamiento más estable. Esto supone una mejora notable respecto al modelo anterior, donde la ausencia de normalización limitaba la capacidad de ajuste.
+
 ### ¿El modelo se generaliza bien a datos nuevos?
 
+Sí, el modelo se generaliza adecuadamente a datos nuevos generados a partir de la misma distribución. Esto se observa en la similitud de las métricas obtenidas en los conjuntos de entrenamiento, validación y test, así como en el comportamiento coherente de las predicciones en las gráficas correspondientes.
 
-
-    # con una relu y a 400 epocas el best validation es a 3711
-    # con dos relu y a 200 epocas el best validation es a 3294
-    # con dos relu, 128 neuronas y a 200 epocas el best validation es a 3294
-    # si está normalizada el validation loss baja a 2425 con 200 epocas y 64 neuronas
-    # No se van a poner 128 neuronas porque no merece la pena
-    # 2415 con 300 epocas
-    # 2398 con 400 epocas
-    # 672 con 400 epocas y 128 neuronas
-    # 672 con 500 epocas y 128 neuronas
-
-    # las 128 neuronas están en fila
+La ausencia de diferencias significativas entre los distintos conjuntos indica que el modelo no presenta sobreajuste y que ha aprendido la estructura subyacente de los datos, más allá del ruido presente en el conjunto de entrenamiento.

@@ -145,7 +145,8 @@ El entrenamiento se ha realizado a lo largo de **340 épocas**. El gráfico de l
 ### Hiperparámetros de entrenamiento
 
 - **Learning rate**: 0.0003
-- **Batch size**: 64
+- **Batch size**: 10
+- **Neuronas**: 64
 - **Optimizador**: AdamW
 - **Épocas**: 340
 

@@ -48,7 +48,7 @@ def train_model(output_folder: Path, device: torch.device):
     optimizer = optim.AdamW(model.parameters(), lr=0.0003)
 
     # Training loop with validation and saving best weights
-    num_epochs = 340  # Aumentamos de 100 a 500 porque el validation loss seguía bajando
+    num_epochs = 340  # Aumentamos de 100 a 340 porque el validation loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
