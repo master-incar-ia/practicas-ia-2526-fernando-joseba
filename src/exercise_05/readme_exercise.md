@@ -1,4 +1,4 @@
-# Ejercicio 1: Crear un Modelo de Aprendizaje Profundo para la clasificación de imágenes en PyTorch con el conjunto de datos CIFAR-10
+# Ejercicio 5: Crear un Modelo de Aprendizaje Profundo para la clasificación de imágenes en PyTorch con el conjunto de datos CIFAR-10
 
 ## Objetivo
 
