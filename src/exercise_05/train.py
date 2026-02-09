@@ -10,8 +10,8 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 from tqdm import tqdm
 
-from .dataset import CIFAR10Dataset
-from .model import MultiLayerPerceptron_05
+from dataset import CIFAR10Dataset
+from model import MultiLayerPerceptron_05
 
 
 def get_device(force: str = "auto") -> torch.device:
@@ -29,8 +29,11 @@ def get_device(force: str = "auto") -> torch.device:
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def train_model(output_folder: Path, device: torch.device):
+    # Data augmentation
+    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.0, 0.0, 0.0), (1.0, 1.0, 1.0))])
+
     # Create an instance of the dataset
-    dataset = CIFAR10Dataset()
+    dataset = CIFAR10Dataset("./data", train=True, transform=transform)
 
     # Split the dataset into train, validation, and test sets
     train_size = int(0.7 * len(dataset))
@@ -39,17 +42,23 @@ def train_model(output_folder: Path, device: torch.device):
     train_dataset, val_dataset, test_dataset = random_split(dataset, [train_size, val_size, test_size])
 
     # Create DataLoaders for the datasets
+    batch_size=10
     pin_memory = True if device.type == "cuda" else False
-    train_loader = DataLoader(train_dataset, batch_size=10, shuffle=True, pin_memory=pin_memory)
-    val_loader = DataLoader(val_dataset, batch_size=10, shuffle=False, pin_memory=pin_memory)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, pin_memory=pin_memory)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, pin_memory=pin_memory)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, pin_memory=pin_memory)
 
     # Define the model, loss function, and optimizer
-    model = MultiLayerPerceptron_05(input_dim=3*32*32, output_dim=10, num_hidden_neurons=128).to(device) # Las 128 neuronas están en fila
+    input_dim=3*32*32 # Las imagenes CIFAR-10 son de 32x32 píxeles con 3 canales (RGB)
+    output_dim=10 # CIFAR-10 tiene 10 clases
+    num_hidden_neurons=64 # Número de neuronas en las capas ocultas
+    lr=0.001 # Learning rate (tasa de aprendizaje)
+    model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     criterion = nn.CrossEntropyLoss() # Función de pérdida. Se usa CrossEntropyLoss porque es un problema de clasificación
-    optimizer = optim.AdamW(model.parameters(), lr=0.001) # AdamW es el algoritmo de optimización y lr es la tasa de aprendizaje (learning rate)
+    optimizer = optim.AdamW(model.parameters(), lr=lr) # AdamW es el algoritmo de optimización que se usará para actualizar los pesos del modelo durante el entrenamiento
 
     # Training loop with validation and saving best weights
-    num_epochs = 400 # Aumentamos de 100 a 400 porque el loss seguía bajando
+    num_epochs = 100 # Aumentamos de 100 a 400 porque el loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
@@ -63,7 +72,7 @@ def train_model(output_folder: Path, device: torch.device):
             # Forward pass
             inputs_cuda = inputs.to(device)
             targets_cuda = targets.to(device)
-            outputs = model(inputs_cuda, use_activation=False) # outputs: y' (y gorro)
+            outputs = model(inputs_cuda) # outputs: y' (y gorro)
             loss = criterion(outputs, targets_cuda) # Pérdida
 
             train_loss += loss.item()
@@ -83,6 +92,7 @@ def train_model(output_folder: Path, device: torch.device):
             for inputs, targets in val_loader:
                 inputs_cuda = inputs.to(device)
                 targets_cuda = targets.to(device)
+
                 outputs = model(inputs_cuda)
                 loss = criterion(outputs, targets_cuda)
                 val_loss += loss.item()
@@ -125,3 +135,9 @@ if __name__ == "__main__":
     device = get_device("auto") # choices are "auto", "cpu", "cuda"
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
+
+    # Conn 64 neuronas y 100 epocas: Best validation loss: 15594
+    # Conn 64 neuronas y 200 epocas: Best validation loss: 
+    # Conn 64 neuronas y 300 epocas: Best validation loss: 
+    # Conn 64 neuronas y 400 epocas: Best validation loss: 
+    # Conn 128 neuronas y 100 epocas: Best validation loss: 

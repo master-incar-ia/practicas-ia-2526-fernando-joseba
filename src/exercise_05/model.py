@@ -52,6 +52,7 @@ class MultiLayerPerceptron_05(nn.Module): # Hereda de nn.Module, es un requisito
     """
     def __init__(self, input_dim, output_dim, num_hidden_neurons): # Parametros de entrada y salida
         super().__init__() # Es necesario
+        self.flatten = nn.Flatten() # Aplanar la imagen de 3D a 1D para que pueda ser procesada por las capas lineales
         self.fc1 = nn.Linear(input_dim, num_hidden_neurons) # Capa fully conected (lineal)
         self.fc2 = nn.Linear(num_hidden_neurons, num_hidden_neurons)
         self.fc3 = nn.Linear(num_hidden_neurons, output_dim)
