@@ -7,28 +7,30 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
+from torchvision import transforms
 from tqdm import tqdm
 
-from dataset import NoisyRegressionDataset
-from model import MultiLayerPerceptron
+from .dataset import CIFAR10Dataset
+from .model import MultiLayerPerceptron_05
 
 
 def get_device(force: str = "auto") -> torch.device:
-    """Return a torch.device based on the `force` option.
-
-    force: 'auto'|'cpu'|'cuda' - when 'auto' will pick cuda if available.
+    """
+    Devuelve el dispositivo según 'force':
+    - 'cpu'  -> CPU
+    - 'cuda' -> GPU
+    - 'auto' -> GPU si está disponible, si no CPU
     """
     force = force.lower()
     if force == "cpu":
         return torch.device("cpu")
     if force == "cuda":
         return torch.device("cuda")
-    # auto
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def train_model(output_folder: Path, device: torch.device):
     # Create an instance of the dataset
-    dataset = NoisyRegressionDataset()
+    dataset = CIFAR10Dataset()
 
     # Split the dataset into train, validation, and test sets
     train_size = int(0.7 * len(dataset))
@@ -42,10 +44,8 @@ def train_model(output_folder: Path, device: torch.device):
     val_loader = DataLoader(val_dataset, batch_size=10, shuffle=False, pin_memory=pin_memory)
 
     # Define the model, loss function, and optimizer
-    input_dim = 1
-    output_dim = 1
-    model = MultiLayerPerceptron(input_dim, output_dim, num_hidden_neurons=128, apodo="exercise_03").to(device) # Las 128 neuronas están en fila
-    criterion = nn.MSELoss() # Función de pérdida. Se usa el MSE porque es un problema de regresión, no de clasificación
+    model = MultiLayerPerceptron_05(input_dim=3*32*32, output_dim=10, num_hidden_neurons=128).to(device) # Las 128 neuronas están en fila
+    criterion = nn.CrossEntropyLoss() # Función de pérdida. Se usa CrossEntropyLoss porque es un problema de clasificación
     optimizer = optim.AdamW(model.parameters(), lr=0.001) # AdamW es el algoritmo de optimización y lr es la tasa de aprendizaje (learning rate)
 
     # Training loop with validation and saving best weights
