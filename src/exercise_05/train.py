@@ -51,14 +51,14 @@ def train_model(output_folder: Path, device: torch.device):
     # Define the model, loss function, and optimizer
     input_dim=3*32*32 # Las imagenes CIFAR-10 son de 32x32 píxeles con 3 canales (RGB)
     output_dim=10 # CIFAR-10 tiene 10 clases
-    num_hidden_neurons=64 # Número de neuronas en las capas ocultas
+    num_hidden_neurons=128 # Número de neuronas en las capas ocultas
     lr=0.001 # Learning rate (tasa de aprendizaje)
     model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     criterion = nn.CrossEntropyLoss() # Función de pérdida. Se usa CrossEntropyLoss porque es un problema de clasificación
     optimizer = optim.AdamW(model.parameters(), lr=lr) # AdamW es el algoritmo de optimización que se usará para actualizar los pesos del modelo durante el entrenamiento
 
     # Training loop with validation and saving best weights
-    num_epochs = 100 # Aumentamos de 100 a 400 porque el loss seguía bajando
+    num_epochs = 300 # Aumentamos de 100 a 400 porque el loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
@@ -136,8 +136,10 @@ if __name__ == "__main__":
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
 
-    # Conn 64 neuronas y 100 epocas: Best validation loss: 15594
-    # Conn 64 neuronas y 200 epocas: Best validation loss: 
-    # Conn 64 neuronas y 300 epocas: Best validation loss: 
-    # Conn 64 neuronas y 400 epocas: Best validation loss: 
-    # Conn 128 neuronas y 100 epocas: Best validation loss: 
+    # Con 64 neuronas y 100 epocas: Best validation loss: 15594
+    # Con 64 neuronas y 200 epocas: Best validation loss: 15363
+    # Con 64 neuronas y 300 epocas: Best validation loss: 15269
+    # Con 128 neuronas y 100 epocas: Best validation loss: 15061
+    # Con 128 neuronas y 200 epocas: Best validation loss: 15015
+    # Con 128 neuronas y 300 epocas: Best validation loss: 15015
+    # Con 256 neuronas y 100 epocas: Best validation loss: 15090
