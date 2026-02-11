@@ -58,7 +58,7 @@ def train_model(output_folder: Path, device: torch.device):
     optimizer = optim.AdamW(model.parameters(), lr=lr) # AdamW es el algoritmo de optimización que se usará para actualizar los pesos del modelo durante el entrenamiento
 
     # Training loop with validation and saving best weights
-    num_epochs = 300 # Aumentamos de 100 a 400 porque el loss seguía bajando
+    num_epochs = 200 # Aumentamos de 100 a 200 porque el loss seguía bajando
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
