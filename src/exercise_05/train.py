@@ -33,13 +33,9 @@ def train_model(output_folder: Path, device: torch.device):
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.0, 0.0, 0.0), (1.0, 1.0, 1.0))])
 
     # Create an instance of the dataset
-    dataset = CIFAR10Dataset("./data", train=True, transform=transform)
-
-    # Split the dataset into train, validation, and test sets
-    train_size = int(0.7 * len(dataset))
-    val_size = int(0.15 * len(dataset))
-    test_size = len(dataset) - train_size - val_size
-    train_dataset, val_dataset, test_dataset = random_split(dataset, [train_size, val_size, test_size])
+    train_dataset = CIFAR10Dataset("./data", train=True, transform=transform)
+    test_dataset = CIFAR10Dataset("./data", train=False, transform=transform)
+    val_dataset = CIFAR10Dataset("./data", train=False, transform=transform)
 
     # Create DataLoaders for the datasets
     batch_size=64 # Se aumenta para reducir el tiempo de entrenamiento

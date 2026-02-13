@@ -47,6 +47,7 @@ if __name__ == "__main__":
 
     dataset_train = CIFAR10Dataset("./data", train=True, transform=transform)
     dataset_test = CIFAR10Dataset("./data", train=False, transform=transform)
+    dataset_val = CIFAR10Dataset("./data", train=False, transform=transform)
     print(f"Dataset length: {len(dataset_train)}")
     print(f"First item: {dataset_train[0]}")
     # save the plot
