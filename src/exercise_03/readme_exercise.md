@@ -37,8 +37,7 @@ El vector de entrada tiene tamaño [bs x 1]. La matriz de pesos tiene un tamaño
 
 #### Explicación del diagrama de entrenamiento
 
-El diagrama representa el proceso completo de entrenamiento de un modelo de
-Machine Learning entrenado mediante la minimización de una función de pérdida.
+El diagrama representa el proceso completo de entrenamiento de un modelo de Machine Learning entrenado mediante la minimización de una función de pérdida.
 
 ##### Elementos del diagrama
 
