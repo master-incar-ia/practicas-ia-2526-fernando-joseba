@@ -4,6 +4,8 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import seaborn as sns
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
@@ -28,152 +30,102 @@ def get_device(force: str = "auto") -> torch.device:
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def compute_confusion_matrix(y_true: np.ndarray, y_pred: np.ndarray, num_classes: int) -> np.ndarray:
-    """
-    Construye la matriz de confusión (num_classes x num_classes).
-    Filas: clase real
-    Columnas: clase predicha
-    """
-    cm = np.zeros((num_classes, num_classes), dtype=np.int64)
-    for t, p in zip(y_true, y_pred):
-        cm[t, p] += 1
-    return cm
+def evaluate_and_plot(loader, model, dataset_name, output_folder, device, class_names):
+    model.eval() # Poner el modelo en modo evaluación para poder desactivar dropout, batchnorm, etc.
+    all_inputs = []  # X (inputs)
+    all_outputs = [] # Y' (salida del modelo: logits)
+    all_targets = [] # Y (targets reales: clase 0..9)
 
+    total_loss = 0.0 # Para calcular el loss medio
+    correct = 0 # Para contar aciertos
+    total = 0 # Total de muestras
 
-def plot_confusion_matrix(cm: np.ndarray, class_names, output_folder: Path) -> None:
-    """
-    Dibuja y guarda la matriz de confusión como imagen.
-    """
-    plt.figure(figsize=(10, 8))
-    plt.imshow(cm, interpolation="nearest")
-    plt.title("Confusion Matrix")
-    plt.colorbar()
+    criterion = nn.CrossEntropyLoss()
 
-    tick_marks = np.arange(len(class_names))
-    plt.xticks(tick_marks, class_names, rotation=45, ha="right")
-    plt.yticks(tick_marks, class_names)
-
-    # Escribir valores en cada celda
-    thresh = cm.max() * 0.6
-    for i in range(cm.shape[0]):
-        for j in range(cm.shape[1]):
-            plt.text(
-                j, i, int(cm[i, j]),
-                ha="center", va="center",
-                color="white" if cm[i, j] > thresh else "black",
-                fontsize=8
-            )
-
-    plt.ylabel("True label")
-    plt.xlabel("Predicted label")
-    plt.tight_layout()
-    plt.savefig(output_folder / "confusion_matrix.png")
-    plt.close()
-
-
-def evaluate(loader: DataLoader, model: nn.Module, criterion: nn.Module, device: torch.device):
-    """
-    Evalúa un dataloader:
-    - loss medio
-    - accuracy
-    - vectores y_true / y_pred (para matriz de confusión)
-    """
-    model.eval()  # modo evaluación (desactiva dropout/bn si existieran)
-    total_loss = 0.0
-    correct = 0
-    total = 0
-    y_true_list = []
-    y_pred_list = []
-
-    with torch.no_grad():  # sin gradientes para ir más rápido y gastar menos memoria
+    with torch.no_grad(): # Desactivar el cálculo de gradientes porque no es necesario para evaluación
         for inputs, targets in loader:
-            # Mover a device (GPU/CPU)
+            # Mover datos al device (GPU/CPU)
             inputs = inputs.to(device)
             targets = targets.to(device)
 
             # Forward: el modelo devuelve logits (B, 10)
-            logits = model(inputs)
+            outputs = model(inputs)
 
-            # Loss de clasificación
-            loss = criterion(logits, targets)
+            # Loss de clasificación (CrossEntropy)
+            loss = criterion(outputs, targets)
             total_loss += loss.item()
 
-            # Predicción: clase con mayor logit
-            preds = torch.argmax(logits, dim=1)
+            # Convertir logits -> clase predicha (argmax por fila)
+            preds = torch.argmax(outputs, dim=1)
 
-            # Accuracy
+            # Accuracy (aciertos / total)
             correct += (preds == targets).sum().item()
             total += targets.size(0)
 
-            # Guardar para matriz de confusión (pasamos a CPU -> numpy)
-            y_true_list.append(targets.detach().cpu().numpy())
-            y_pred_list.append(preds.detach().cpu().numpy())
+            all_inputs.append(inputs.detach().cpu().numpy()) # X
+            all_outputs.append(outputs.detach().cpu().numpy()) # Y' (logits)
+            all_targets.append(targets.detach().cpu().numpy()) # Y (clases reales)
 
-    avg_loss = total_loss / len(loader)
-    acc = correct / total
-
-    y_true = np.concatenate(y_true_list)
-    y_pred = np.concatenate(y_pred_list)
-
-    return avg_loss, acc, y_true, y_pred
-
-
-def evaluate_and_plot(loader, model, dataset_name, output_folder):
-    model.eval()  # Poner el modelo en modo evaluación para poder desactivar dropout, batchnorm, etc.
-    all_inputs = []  # X
-    all_outputs = []  # Y'
-    all_targets = []  # Y
-
-    with torch.no_grad():  # Desactivar el cálculo de gradientes para ir más rápido
-        for inputs, targets in loader:
-            outputs = model(inputs)
-            all_inputs.append(inputs.numpy())
-            all_outputs.append(outputs.numpy())
-            all_targets.append(targets.numpy())
-
+    # Concatenar batches
     all_inputs = np.concatenate(all_inputs)
     all_outputs = np.concatenate(all_outputs)
     all_targets = np.concatenate(all_targets)
 
+    # En clasificación, "y_pred" no es un valor continuo, es la clase predicha.
+    y_pred = np.argmax(all_outputs, axis=1)
+
+    # "x": aquí no es un escalar, así que guardamos un índice de muestra (0..N-1)
     df = pd.DataFrame(
-        data=np.array(
-            [all_inputs.flatten(), all_targets.flatten(), all_outputs.flatten()]
-        ).transpose(),
+        data=np.array([np.arange(len(all_targets)), all_targets, y_pred]).transpose(),
         columns=["x", "y_true", "y_pred"],
     )
 
-    # Calculate cross entropy loss, accuracy and confusion matrix
-    cross_entropy_loss = nn.CrossEntropyLoss()(torch.tensor(all_outputs), torch.tensor(all_targets)).item() # Pérdida de entropía cruzada
-    accuracy = np.mean(np.argmax(all_outputs, axis=1) == all_targets) # Exactitud de la clasificación
-
+    avg_loss = total_loss / len(loader)
+    accuracy = correct / total
     metrics = {
-        "cross entropy loss": cross_entropy_loss,
+        "loss": avg_loss,
         "accuracy": accuracy,
     }
 
     print(f"Evaluation metrics for {dataset_name} dataset:")
     print(metrics)
 
-    ax = sns.regplot(df, x="y_true", y="y_pred", label=dataset_name)
-    ax.set_title(f"Regression plot for {dataset_name} dataset")
-    plt.legend()
-    plt.savefig(f"{output_folder}/{dataset_name}_regression_plot.png")
-    plt.show()
-    plt.close()
+    # Construir matriz de confusión
+    num_classes = len(class_names)
+    cm = np.zeros((num_classes, num_classes), dtype=np.int64)
+    for t, p in zip(all_targets, y_pred):
+        cm[int(t), int(p)] += 1
 
-    # Plot the data points
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(data=df, x="x", y="y_true", label="True")
-    sns.scatterplot(data=df, x="x", y="y_pred", label="Predicted")
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title(f"Data points for {dataset_name} dataset")
-    plt.legend()
-    plt.savefig(f"{output_folder}/{dataset_name}_data_points_plot.png")
+    plt.figure(figsize=(10, 10))
+    sns.heatmap(cm, annot=False, fmt="d", xticklabels=class_names, yticklabels=class_names)
+    plt.title(f"Confusion matrix for {dataset_name} dataset")
+    plt.ylabel("True label")
+    plt.xlabel("Predicted label")
+    plt.tight_layout()
+    plt.savefig(f"{output_folder}/{dataset_name}_confusion_matrix.png")
     plt.show()
     plt.close()
 
     return metrics
+
+
+def save_metrics_as_picture(metrics, filepath):
+    # Create a DataFrame
+    df = pd.DataFrame(metrics)
+
+    # Round the values to 3 decimal places
+    df = df.round(3)
+
+    # Plot the table and save as an image
+    fig, ax = plt.subplots(figsize=(8, 2))  # set size frame
+    ax.axis("tight")
+    ax.axis("off")
+    table = ax.table(
+        cellText=df.values, colLabels=df.columns, rowLabels=df.index, cellLoc="center", loc="center"
+    )
+
+    # Save the plot as an image
+    plt.savefig(filepath)
 
 
 if __name__ == "__main__":
@@ -211,46 +163,18 @@ if __name__ == "__main__":
     output_dim=10 # CIFAR-10 tiene 10 clases
     num_hidden_neurons=128 # Número de neuronas en las capas ocultas
     model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
-    model.load_state_dict(torch.load(output_folder / "best_model.pth"))
+    model.load_state_dict(torch.load(output_folder / "best_model.pth", map_location=device, weights_only=True))
 
+    class_names = dataset.data.classes
     metrics = {}
-    # Evaluate and plot for train, validation and test datasets
-    metrics["train"] = evaluate_and_plot(train_loader, model, "train", output_folder)
-    metrics["validation"] = evaluate_and_plot(val_loader, model, "validation", output_folder)
-    metrics["test"] = evaluate_and_plot(test_loader, model, "test", output_folder)
+    metrics["train"] = evaluate_and_plot(train_loader, model, "train", output_folder, device, class_names)
+    metrics["validation"] = evaluate_and_plot(val_loader, model, "validation", output_folder, device, class_names)
+    metrics["test"] = evaluate_and_plot(test_loader, model, "test", output_folder, device, class_names)
 
     # save  metrics as csv
     pd.DataFrame(metrics).to_csv(output_folder / "metrics.csv")
 
     # Save the metrics as an image
     save_metrics_as_picture(metrics, output_folder / "metrics.png")
-
-    print("Evaluation complete!")
-
-
-
-
-
-
-
-
-    # Loss de clasificación (logits + targets)
-    criterion = nn.CrossEntropyLoss()
-
-    # Nombres de clase (CIFAR-10)
-    class_names = dataset.data.classes  # ['airplane', 'automobile', ...]
-
-    # Evaluar en train/val/test y guardar resultados
-    results_lines = []
-
-    for split_name, loader in [("train", train_loader), ("validation", val_loader), ("test", test_loader)]:
-        loss, acc, y_true, y_pred = evaluate(loader, model, criterion, device)
-
-        print(f"{split_name}: loss={loss:.4f}  acc={acc:.4f}")
-        results_lines.append(f"{split_name}: loss={loss:.6f}  acc={acc:.6f}")
-
-        # Matriz de confusión + plot
-        cm = compute_confusion_matrix(y_true, y_pred, num_classes=output_dim)
-        plot_confusion_matrix(cm, class_names, output_folder)
 
     print("Evaluation complete!")
