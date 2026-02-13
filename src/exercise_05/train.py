@@ -11,7 +11,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 from dataset import CIFAR10Dataset
-from model import MultiLayerPerceptron_05
+from model import ConvolutionalNeuralNetwork
 
 
 def get_device(force: str = "auto") -> torch.device:
@@ -42,7 +42,7 @@ def train_model(output_folder: Path, device: torch.device):
     train_dataset, val_dataset, test_dataset = random_split(dataset, [train_size, val_size, test_size])
 
     # Create DataLoaders for the datasets
-    batch_size=10
+    batch_size=64
     pin_memory = True if device.type == "cuda" else False
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, pin_memory=pin_memory)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, pin_memory=pin_memory)
@@ -51,14 +51,15 @@ def train_model(output_folder: Path, device: torch.device):
     # Define the model, loss function, and optimizer
     input_dim=3*32*32 # Las imagenes CIFAR-10 son de 32x32 píxeles con 3 canales (RGB)
     output_dim=10 # CIFAR-10 tiene 10 clases
-    num_hidden_neurons=128 # Número de neuronas en las capas ocultas
+    num_hidden_neurons=64 # Número de neuronas en las capas ocultas
     lr=0.001 # Learning rate (tasa de aprendizaje)
-    model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
+    # model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
+    model = ConvolutionalNeuralNetwork(output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     criterion = nn.CrossEntropyLoss() # Función de pérdida. Se usa CrossEntropyLoss porque es un problema de clasificación
     optimizer = optim.AdamW(model.parameters(), lr=lr) # AdamW es el algoritmo de optimización que se usará para actualizar los pesos del modelo durante el entrenamiento
 
     # Training loop with validation and saving best weights
-    num_epochs = 200 # Aumentamos de 100 a 200 porque el loss seguía bajando
+    num_epochs = 30
     best_val_loss = float("inf")
     best_model_path = output_folder / "best_model.pth"
 
@@ -143,3 +144,6 @@ if __name__ == "__main__":
     # Con 128 neuronas y 200 epocas: Best validation loss: 15015
     # Con 128 neuronas y 300 epocas: Best validation loss: 15015
     # Con 256 neuronas y 100 epocas: Best validation loss: 15090
+    # con una cnn se han bajdo las epocas ya que empezaba a memorizar, también se bajan las neuronas en la fullyconected
+    # se bajan las neuronas a 64 para evitar el overfitting
+    

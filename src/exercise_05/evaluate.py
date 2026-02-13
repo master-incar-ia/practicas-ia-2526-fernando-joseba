@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 
 from dataset import CIFAR10Dataset
-from model import MultiLayerPerceptron_05
+from model import ConvolutionalNeuralNetwork
 
 
 def get_device(force: str = "auto") -> torch.device:
@@ -96,7 +96,7 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder, device, class_
     for t, p in zip(all_targets, y_pred):
         cm[int(t), int(p)] += 1
 
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(10, 8))
     sns.heatmap(cm, annot=False, fmt="d", xticklabels=class_names, yticklabels=class_names)
     plt.title(f"Confusion matrix for {dataset_name} dataset")
     plt.ylabel("True label")
@@ -117,7 +117,7 @@ def save_metrics_as_picture(metrics, filepath):
     df = df.round(3)
 
     # Plot the table and save as an image
-    fig, ax = plt.subplots(figsize=(8, 2))  # set size frame
+    fig, ax = plt.subplots(figsize=(8, 2)) # set size frame
     ax.axis("tight")
     ax.axis("off")
     table = ax.table(
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     train_dataset, val_dataset, test_dataset = random_split(dataset, [train_size, val_size, test_size])
 
     # Create DataLoaders for the datasets
-    batch_size=10
+    batch_size=64
     pin_memory = True if device.type == "cuda" else False
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, pin_memory=pin_memory)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, pin_memory=pin_memory)
@@ -161,8 +161,8 @@ if __name__ == "__main__":
     # Load the best model weights
     input_dim=3*32*32 # Las imagenes CIFAR-10 son de 32x32 píxeles con 3 canales (RGB)
     output_dim=10 # CIFAR-10 tiene 10 clases
-    num_hidden_neurons=128 # Número de neuronas en las capas ocultas
-    model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
+    num_hidden_neurons=64 # Número de neuronas en las capas ocultas
+    model = ConvolutionalNeuralNetwork(output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     model.load_state_dict(torch.load(output_folder / "best_model.pth", map_location=device, weights_only=True))
 
     class_names = dataset.data.classes
