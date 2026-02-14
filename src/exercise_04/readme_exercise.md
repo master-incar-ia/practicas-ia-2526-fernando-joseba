@@ -134,7 +134,7 @@ La arquitectura CNN propuesta está basada en VGGNet, utilizando capas convoluci
 
 La función de pérdida utilizada depende del tipo de problema que se esté abordando:
 - En problemas de regresión, se emplean métricas como el error cuadrático medio (MSE), ya que la salida es un valor continuo.
-- En problemas de clasificación multiclase, como en este ejercicio con CIFAR-10, se utiliza la Cross-Entropy Loss, que mide la discrepancia entre los logits generados por el modelo y la clase real.
+- En problemas de clasificación multiclase, como en este ejercicio, se utiliza la Cross-Entropy Loss, que mide la discrepancia entre los logits generados por el modelo y la clase real.
 
 ### Función de Pérdida Seleccionada
 
@@ -145,21 +145,19 @@ En la implementación utilizada (CrossEntropyLoss de PyTorch), la función combi
 ### Posibles arquitecturas
 
 Para problemas de clasificación de imágenes existen distintas arquitecturas posibles:
-- Modelo lineal (perceptrón simple): este tipo de modelo realiza únicamente una combinación lineal de las características de entrada. En el caso de imágenes, esto implica que no puede capturar relaciones complejas entre los píxeles ni modelar patrones visuales relevantes. Por tanto, su capacidad de clasificación en un conjunto como CIFAR-10 es muy limitada.
 - Perceptrón multicapa (MLP): los modelos con una o más capas ocultas y funciones de activación no lineales permiten modelar relaciones complejas entre las características de entrada. Sin embargo, al aplanar la imagen, pierden la información espacial.
 - Redes neuronales convolucionales (CNN): son arquitecturas específicamente diseñadas para trabajar con datos estructurados espacialmente, como imágenes. Las capas convolucionales permiten extraer características locales y preservar la información espacial, lo que produce un rendimiento superior en tareas de visión por computador.
-
-La arquitectura seleccionada es una Red Neuronal Convolucional (CNN) de estructura inspirada en VGGNet, con capas convolucionales que extraen características locales y un bloque de capas totalmente conectadas para la clasificación final.
+- De las arquitecturas aprendidas en clase para las CNN se ha decidido usar la arquitectura VGGNet
 
 ### Activación de la última capa
 
-Al tratarse de una tarea de clasificación multiclase, la salida del modelo debe representar las puntuaciones asociadas a cada una de las 10 clases posibles. Por este motivo, no se aplica ninguna función de activación en la última capa del modelo.
+Al tratarse de una tarea de clasificación multiclase, la salida del modelo debe representar las probabilidades asociadas a cada una de las 10 clases posibles. Por este motivo, no se aplica ninguna función de activación en la última capa del modelo.
 
 La capa final devuelve directamente logits, de este modo, se garantiza una implementación correcta y numéricamente estable del proceso de entrenamiento sin necesidad de aplicar una activación adicional en la salida.
 
 ### Otras consideraciones
 
-Se utiliza el optimizador AdamW debido a su estabilidad durante el entrenamiento y a su buena capacidad de convergencia en redes neuronales profundas. El aumento de datos es un componente crucial en esta arquitectura, permitiendo que el modelo generalice mejor incluso con un conjunto de datos relativamente pequeño como CIFAR-10.
+Se utiliza el optimizador AdamW debido a su estabilidad durante el entrenamiento y a su buena capacidad de convergencia en redes neuronales profundas. El aumento de datos permite que el modelo generalice mejor incluso con un conjunto de datos relativamente pequeño como CIFAR-10.
 
 ## Entrenamiento
 
@@ -169,7 +167,6 @@ Durante el proceso se ha monitorizado la evolución de la función de pérdida t
 
 El aumento de datos se aplica únicamente durante el entrenamiento, permitiendo que el modelo vea versiones variadas de las imágenes. Esto contribuye significativamente a mejorar la generalización del modelo respecto a una CNN sin aumento de datos.
 
-El gráfico de la función de pérdida se muestra a continuación.
 
 ### Hiperparámetros de entrenamiento
 
@@ -187,9 +184,8 @@ Las transformaciones de aumento de datos incluyen rotaciones (±15°), desplazam
 
 ### Discusión sobre el proceso de entrenamiento
 
-Durante el entrenamiento se observa una disminución progresiva de la función de pérdida en el conjunto de entrenamiento, mientras que la pérdida de validación también desciende en las primeras épocas y posteriormente tiende a estabilizarse. Esto indica que el modelo aprende patrones relevantes al inicio, pero que la mejora se vuelve más limitada a medida que avanza el entrenamiento.
-
-Las curvas de entrenamiento y validación presentan una separación moderada, lo que es esperado en arquitecturas convolucionales incluso con aumento de datos. El impacto positivo del aumento de datos se evidencia en la reducción del sobreajuste comparado con una CNN sin estas transformaciones.
+Durante el entrenamiento se observa una disminución progresiva de la función de pérdida en el conjunto de entrenamiento, mientras que el loss de validación también desciende en las primeras épocas y posteriormente tiende a estabilizarse. Esto indica que el modelo aprende patrones relevantes al inicio, pero que la mejora se vuelve más limitada a medida que avanza el entrenamiento.
+ El impacto positivo del aumento de datos se evidencia en la reducción del sobreajuste comparado con una CNN sin ampliación de datos.
 
 Se observa que aumentar el número de épocas más allá de 50 no produce mejoras significativas en la pérdida de validación. Por este motivo, se selecciona el modelo correspondiente al menor validation loss obtenido durante el entrenamiento como configuración final.
 
