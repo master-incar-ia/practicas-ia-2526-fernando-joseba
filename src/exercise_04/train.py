@@ -48,7 +48,7 @@ def train_model(output_folder: Path, device: torch.device):
     # Define the model, loss function, and optimizer
     input_dim=3*32*32 # Las imagenes CIFAR-10 son de 32x32 píxeles con 3 canales (RGB)
     output_dim=10 # CIFAR-10 tiene 10 clases
-    num_hidden_neurons=128 # Número de neuronas en las capas ocultas
+    num_hidden_neurons=64 # Número de neuronas en las capas ocultas
     lr=0.001 # Learning rate (tasa de aprendizaje)
     # model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     model = ConvolutionalNeuralNetwork(output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
@@ -62,6 +62,7 @@ def train_model(output_folder: Path, device: torch.device):
 
     train_losses = []
     val_losses = []
+
 
     for epoch in tqdm(range(num_epochs)):
         model.train()
