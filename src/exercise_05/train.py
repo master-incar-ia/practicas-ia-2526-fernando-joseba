@@ -131,21 +131,3 @@ if __name__ == "__main__":
     device = get_device("auto") # choices are "auto", "cpu", "cuda"
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
-
-    # Con 64 neuronas y 100 epocas: Best validation loss: 15594
-    # Con 64 neuronas y 200 epocas: Best validation loss: 15363
-    # Con 64 neuronas y 300 epocas: Best validation loss: 15269
-    # Con 128 neuronas y 100 epocas: Best validation loss: 15061
-    # Con 128 neuronas y 200 epocas: Best validation loss: 15015
-    # Con 128 neuronas y 300 epocas: Best validation loss: 15015
-    # Con 256 neuronas y 100 epocas: Best validation loss: 15090
-    # con una cnn se han bajdo las epocas ya que empezaba a memorizar, también se bajan las neuronas en la fullyconected
-    # se bajan las neuronas a 64 para evitar el overfitting
-
-    # con 128 neuronas, 200 epocas y batch size de 63: Best validation loss: 14167
-    # con 128 neuronas, 30 epocas y batch size de 64: Best validation loss: 15306
-    # con 256 neuronas, 30 epocas y batch size de 64: Best validation loss: 14675
-    # con 256 neuronas, 40 epocas y batch size de 64: Best validation loss: 14521
-    # con 256 neuronas, 50 epocas y batch size de 64: Best validation loss: 1.4515
-    # con 512 neuronas, 50 epocas y batch size de 64: Best validation loss: 1.4335
-    # con el dropout se ha bajado el best validation loss 

@@ -28,7 +28,6 @@ Expresado gráficamente:
 graph TD
     A((x)) --> B["f(W,x)"]
     B --> C((y))
-    
 ```
 
 El vector de entrada tiene tamaño [bs x 1]. La matriz de pesos tiene un tamaño [1 x 1]
@@ -55,17 +54,12 @@ El diagrama representa el proceso completo de entrenamiento de un modelo de Mach
 
 1. La entrada **x** se introduce en el modelo **f(W, x)**.
 2. El modelo genera una predicción **y′**.
-3. La predicción **y′** se compara con el valor real **y** mediante la función
-   de pérdida **Loss(y, y′)**.
-4. La función de pérdida produce un valor escalar que cuantifica el error del
-   modelo.
-5. Este error se utiliza para actualizar los pesos **W**, generalmente mediante
-   un algoritmo de optimización basado en gradiente descendente.
-6. Los pesos actualizados se realimentan al modelo, cerrando el ciclo de
-   entrenamiento.
+3. La predicción **y′** se compara con el valor real **y** mediante la función de pérdida **Loss(y, y′)**.
+4. La función de pérdida produce un valor escalar que cuantifica el error del modelo.
+5. Este error se utiliza para actualizar los pesos **W**, generalmente mediante un algoritmo de optimización basado en gradiente descendente.
+6. Los pesos actualizados se realimentan al modelo, cerrando el ciclo de entrenamiento.
 
-Este proceso se repite de forma iterativa hasta que la función de pérdida
-converge o se alcanza un criterio de parada.
+Este proceso se repite de forma iterativa hasta que la función de pérdida converge o se alcanza un criterio de parada.
 
 ```mermaid
 graph TD
@@ -161,8 +155,6 @@ La tasa de aprendizaje se establece en 0.001. El entrenamiento se realiza durant
 
 ![image](../../outs/exercise_03/loss_plot.png)
 
-### Discusión sobre el proceso de entrenamiento [CAMBIARLO]
-
 ### Discusión sobre el proceso de entrenamiento
 
 Durante el entrenamiento se observa una disminución progresiva de la función de pérdida tanto en el conjunto de entrenamiento como en el de validación. En las primeras épocas la pérdida desciende de forma más pronunciada, mientras que a medida que avanza el entrenamiento la mejora se vuelve más gradual, lo que indica una convergencia estable del modelo.
@@ -171,10 +163,9 @@ Las curvas de entrenamiento y validación muestran un comportamiento similar y n
 
 A partir de 400 épocas la mejora en la pérdida de validación es limitada, por lo que aumentar el número de épocas no produce una ganancia significativa. Por este motivo, el entrenamiento se detiene, seleccionando el modelo con mejor rendimiento en el conjunto de validación.
 
-
 ## Evaluación
 
-### Métricas de evaluacións
+### Métricas de evaluación
 
 Para evaluar el rendimiento del modelo se utiliza: MSE (Mean Squared Error), MAE (Mean Absolute Error) y el coeficiente de determinación R^2. Estas métricas permiten analizar tanto la magnitud del error como la capacidad del modelo para explicar la variabilidad de los datos.
 
