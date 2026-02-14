@@ -96,8 +96,7 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder, device, class_
     for t, p in zip(all_targets, y_pred): 
         cm[int(t), int(p)] += 1
 
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(cm, annot=True, fmt="d", xticklabels=class_names, yticklabels=class_names)
+    sns.heatmap(cm, annot=True, cmap="Blues",  fmt="d", xticklabels=class_names, yticklabels=class_names)
     plt.title(f"Confusion matrix for {dataset_name} dataset")
     plt.ylabel("True label")
     plt.xlabel("Predicted label")

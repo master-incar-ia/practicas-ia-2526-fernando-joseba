@@ -48,7 +48,7 @@ def train_model(output_folder: Path, device: torch.device):
     # Define the model, loss function, and optimizer
     input_dim=3*32*32 # Las imagenes CIFAR-10 son de 32x32 píxeles con 3 canales (RGB)
     output_dim=10 # CIFAR-10 tiene 10 clases
-    num_hidden_neurons=64 # Número de neuronas en las capas ocultas
+    num_hidden_neurons=128 # Número de neuronas en las capas ocultas
     lr=0.001 # Learning rate (tasa de aprendizaje)
     # model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     model = ConvolutionalNeuralNetwork(output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
@@ -134,13 +134,5 @@ if __name__ == "__main__":
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
 
-    # Con 64 neuronas y 100 epocas: Best validation loss: 15594
-    # Con 64 neuronas y 200 epocas: Best validation loss: 15363
-    # Con 64 neuronas y 300 epocas: Best validation loss: 15269
-    # Con 128 neuronas y 100 epocas: Best validation loss: 15061
-    # Con 128 neuronas y 200 epocas: Best validation loss: 15015
-    # Con 128 neuronas y 300 epocas: Best validation loss: 15015
-    # Con 256 neuronas y 100 epocas: Best validation loss: 15090
-    # con una cnn se han bajdo las epocas ya que empezaba a memorizar, también se bajan las neuronas en la fullyconected
-    # se bajan las neuronas a 64 para evitar el overfitting
+   
     

@@ -101,7 +101,7 @@ Escribe tu respuesta aquí.
 
 ### Grafo de la función de pérdida
 
-![image](../../outs/exercise_05/loss_plot.png)
+![image](../../outs/exercise_04/loss_plot.png)
 
 ### Discusión sobre el proceso de entrenamiento
 
@@ -113,15 +113,10 @@ Escribe tu respuesta aquí.
 
 Escribe tu respuesta aquí.
 
-![image](../../outs/exercise_05/train_regression_plot.png)
-
-![image](../../outs/exercise_05/validation_regression_plot.png)
-
-![image](../../outs/exercise_05/test_regression_plot.png)
 
 Las métricas de cada conjunto de datos se representan:
 
-![image](../../outs/exercise_05/metrics.png)
+![image](../../outs/exercise_04/metrics.png)
 
 ### Evaluación de los resultados
 
@@ -129,15 +124,15 @@ Aquí tenéis ejemplos de resultados de evaluación para conjuntos de entrenamie
 
 Ejemplo para el conjunto de entrenamiento:
 
-![image](../../outs/exercise_05/train_data_points_plot.png)
+![image](../../outs/exercise_04/train_confusion_matrix.png)
 
 Ejemplo para el conjunto de validación:
 
-![image](../../outs/exercise_05/validation_data_points_plot.png)
+![image](../../outs/exercise_04/validation_confusion_matrix.png)
 
 Ejemplo para el conjunto de pruebas:
 
-![image](../../outs/exercise_05/test_data_points_plot.png)
+![image](../../outs/exercise_04/test_confusion_matrix.png)
 
 ### Discusión de los resultados
 

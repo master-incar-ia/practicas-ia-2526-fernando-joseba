@@ -66,7 +66,7 @@ class ConvolutionalNeuralNetwork(nn.Module): # Hereda de nn.Module, es un requis
         # Clasificador
         self.flatten = nn.Flatten() # Aplanar la imagen de 3D a 1D para que pueda ser procesada por las capas lineales
         self.fc1 = nn.Linear(64 * 8 * 8, num_hidden_neurons) # Capa fully conected (lineal)
-        self.dropout = nn.Dropout(p=0.5) # Dropout para evitar el overfitting
+        self.dropout = nn.Dropout(p=0.2) # Dropout para evitar el overfitting
         self.fc2 = nn.Linear(num_hidden_neurons, output_dim)
 
     def forward(self, x):
