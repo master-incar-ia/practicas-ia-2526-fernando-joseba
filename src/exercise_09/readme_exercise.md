@@ -1,5 +1,4 @@
-
-# Exercise 1: Create a Deep Learning Model for image classification in PyTorch with CIFAR-10 dataset
+# Exercise 9: Create a Deep Learning Model for image classification in PyTorch with CIFAR-10 dataset
 
 ## Objective
 
@@ -11,135 +10,126 @@ Develop a Variational deep autoencoder model that can classify compress and deco
 4) Create an evaluate.py file that evaluates the model and calculates and stores the evaluation metrics (which are the ones that are needed?)
 5) Use the dedoder to generate synthetic images
 
+## Formalización de tareas
 
-## Task Formalization
+Escribe tu respuesta aquí.
 
-Write your answer here
+### Formalización de tareas (Inferencia)
 
-### Task Formalization (Inference)
+Escribe tu respuesta aquí.
 
-Write your answer here
-### Task Formalization (Training)
+### Formalización de tareas (Entrenamiento)
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-## Evaluation metrics
+## Métricas de evaluación
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-## Data Considerations
+## Consideraciones de datos
 
-### Dataset description
+### Descripción del conjunto de datos
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Data preparation and preprocessing
+### Preparación y preprocesamiento de datos
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Data augmentation
+### Aumento de datos
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-## Model Considerations
+## Consideraciones del modelo
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Suitable Loss Functions
+### Funciones de pérdida adecuadas
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Selected Loss Function
+### Función de Pérdida Seleccionada
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Possible architectures
+### Posibles arquitecturas
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Last layer activation
+### Activación de la última capa
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Other Considerations
+### Otras consideraciones
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-## Training
+## Entrenamiento
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Training hyperparameters
+### Hiperparámetros de entrenamiento
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-### Loss function graph
+### Grafo de la función de pérdida
 
-![image](../../outs/exercise_03/loss_plot.png)
+![image](../../outs/exercise_09/loss_plot.png)
 
-### Discussion of the training process
+### Discusión sobre el proceso de entrenamiento
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-## Evaluation
+## Evaluación
 
-### Evaluation metrics
+### Métricas de evaluacións
 
-Write your answer here
+Escribe tu respuesta aquí.
 
-![image](../../outs/exercise_03//train_regression_plot.png)
+![image](../../outs/exercise_09/train_regression_plot.png)
 
-![image](../../outs/exercise_03//validation_regression_plot.png)
+![image](../../outs/exercise_09/validation_regression_plot.png)
 
-![image](../../outs/exercise_03/test_regression_plot.png)
+![image](../../outs/exercise_09/test_regression_plot.png)
 
-Metrics for each dataset is depicted: 
+Las métricas de cada conjunto de datos se representan:
 
-![image](../../outs/exercise_03/metrics.png)
+![image](../../outs/exercise_09/metrics.png)
 
-### Evaluation results
+### Evaluación de los resultados
 
-Here you have examples of evaluation results for train, validation and test sets.
+Aquí tenéis ejemplos de resultados de evaluación para conjuntos de entrenamiento, validación y prueba.
 
-Example for train set:
+Ejemplo para el conjunto de entrenamiento:
 
-![image](../../outs/exercise_03/train_data_points_plot.png)
+![image](../../outs/exercise_09/train_data_points_plot.png)
 
+Ejemplo para el conjunto de validación:
 
-Example for validation set:
+![image](../../outs/exercise_09/validation_data_points_plot.png)
 
-![image](../../outs/exercise_03/validation_data_points_plot.png)
+Ejemplo para el conjunto de pruebas:
 
+![image](../../outs/exercise_09/test_data_points_plot.png)
 
-Example for test set:
 
-![image](../../outs/exercise_03/test_data_points_plot.png)
+### Discusión de los resultados
 
+¿Cómo resuelve el modelo el problema?
+¿Hay sobreajuste, subajuste o algún otro problema? 
+¿Cómo podemos mejorar el modelo?
+¿Cómo se generalizará este modelo a nuevos datos?
 
-### Discussion of the results
+## Diseño de bucles de retroalimentación
 
-How the model solves the problem?
-Is there overfitting, underfitting or any other issues? 
-How can we improve the model?
-How this model will generalize to new data?
+Describe el proceso que has seguido para mejorar el modelo y la evolución del rendimiento del modelo durante el proceso.
 
-## Design Feedback loops
+Puedes incluir una tabla que indique los chanched parameters y los resultados obtenidos tras el proceso.
 
-Describe the process you have followed to improve the model and the evolution of performance of the model during the process.
+## Preguntas
 
-You can include a table stating the chanched parameters and the obtained results after the process.
+Por favor, responde a las siguientes preguntas. Incluye gráficos si es necesario. Almacenar los gráficos en la carpeta `outs/exercise_09`.
 
+### ¿Cuáles son las diferencias que encontraste entre el modelo anterior y este?
 
-## Questions
-
-Pleaser answer the following questions. Include graphs if necessary. Store the graphs in the `outs/exercise_03` folder.
-
-### Which are the differences you found between previous model and this one?
-
-### Does the model generalizes well to new data?
-
-
-
-
-
-
+### ¿El modelo se generaliza bien a datos nuevos?

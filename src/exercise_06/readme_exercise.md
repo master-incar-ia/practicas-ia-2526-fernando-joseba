@@ -1,4 +1,4 @@
-Ejercicio 1: Crear un modelo de aprendizaje profundo para la detección de desfibrilación a partir de ECG en PyTorch
+# Ejercicio 6: Crear un modelo de aprendizaje profundo para la detección de desfibrilación a partir de ECG en PyTorch
 
 ## Objetivo
 
@@ -76,7 +76,7 @@ Escribe tu respuesta aquí.
 
 ### Grafo de la función de pérdida
 
-![image](../../outs/exercise_03/loss_plot.png)
+![image](../../outs/exercise_06/loss_plot.png)
 
 ### Discusión sobre el proceso de entrenamiento
 
@@ -88,15 +88,15 @@ Escribe tu respuesta aquí.
 
 Escribe tu respuesta aquí.
 
-![image](../../outs/exercise_03//train_regression_plot.png)
+![image](../../outs/exercise_06/train_regression_plot.png)
 
-![image](../../outs/exercise_03//validation_regression_plot.png)
+![image](../../outs/exercise_06/validation_regression_plot.png)
 
-![image](../../outs/exercise_03/test_regression_plot.png)
+![image](../../outs/exercise_06/test_regression_plot.png)
 
 Las métricas de cada conjunto de datos se representan:
 
-![image](../../outs/exercise_03/metrics.png)
+![image](../../outs/exercise_06/metrics.png)
 
 ### Evaluación de los resultados
 
@@ -104,15 +104,15 @@ Aquí tenéis ejemplos de resultados de evaluación para conjuntos de entrenamie
 
 Ejemplo para el conjunto de entrenamiento:
 
-![image](../../outs/exercise_03/train_data_points_plot.png)
+![image](../../outs/exercise_06/train_data_points_plot.png)
 
 Ejemplo para el conjunto de validación:
 
-![image](../../outs/exercise_03/validation_data_points_plot.png)
+![image](../../outs/exercise_06/validation_data_points_plot.png)
 
 Ejemplo para el conjunto de pruebas:
 
-![image](../../outs/exercise_03/test_data_points_plot.png)
+![image](../../outs/exercise_06/test_data_points_plot.png)
 
 
 ### Discusión de los resultados
