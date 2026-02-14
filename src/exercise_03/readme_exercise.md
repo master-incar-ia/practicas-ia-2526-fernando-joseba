@@ -6,7 +6,7 @@ Estimación de una función desconocida mediante un modelo de aprendizaje autom�
 
 ## Formalización de tareas
 
-La tarea que se puede formalizar en dos pasos. Primero, definiremos lo que intentamos lograr de la forma más clara posible. En segundo lugar, definiremos el enfoque que estamos adoptando para resolverlo.
+La tarea se puede formalizar en dos pasos. Primero, definiremos lo que intentamos lograr de la forma más clara posible. En segundo lugar, definiremos el enfoque que estamos adoptando para resolverlo.
 
 ### Formalización de tareas (Inferencia)
 
