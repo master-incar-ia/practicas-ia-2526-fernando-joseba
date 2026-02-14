@@ -68,7 +68,7 @@ El diagrama representa el proceso completo de entrenamiento de un modelo de clas
 
 ##### Flujo del proceso de aprendizaje
 
-1. La imagen $x$ (posiblemente aumentada) se introduce en la CNN.
+1. La imagen $x$ se introduce en la CNN.
 2. El modelo $f(W, x)$ genera un vector de logits $\hat{y}$ a través de capas convolucionales y lineales.
 3. Los logits $\hat{y}$ se comparan con la etiqueta real y mediante la función de pérdida CrossEntropyLoss.
 4. La función de pérdida produce un valor escalar que cuantifica el error del modelo.
@@ -81,17 +81,15 @@ Este proceso se repite de forma iterativa a lo largo de múltiples épocas hasta
 graph TD
     A((x: imagen))
     B((y: etiqueta real))
-    C["Data Augmentation"]
-    M["Modelo CNN f(W,x)"]
+    C["Modelo CNN f(W,x)"]
     D((ŷ: logits))
     L["CrossEntropyLoss(ŷ, y)"]
     O["Optimizador AdamW"]
     W((W))
 
     A --> C
-    C --> M
-    W --> M
-    M --> D
+    W --> C
+    C --> D
     D --> L
     B --> L
     L --> O
@@ -116,13 +114,8 @@ Las imágenes se normalizan mediante obtener la media y división por la desviac
 
 ### Aumento de datos
 
-Se aplican transformaciones de aumento de datos durante el entrenamiento para reducir el sobreajuste. Estas transformaciones incluyen:
-- Rotaciones aleatorias
-- Desplazamientos horizontales (shifts)
-- Zoom aleatorio
-- Cambios en el brillo y contraste
-
-Estas variaciones ayudan al modelo a aprender características que no  varían a pequeñas transformaciones de las imágenes, mejorando su capacidad de generalización a nuevos datos.
+Estas variaciones ayudan al modelo a aprender características que no  varían a pequeñas transformaciones de las imágenes, mejorando su capacidad de generalización a nuevos datos. 
+En este caso no las aplicamos.
 
 ## Consideraciones del modelo
 
@@ -165,18 +158,13 @@ El entrenamiento se ha realizado durante 30 épocas, seleccionando el modelo con
 
 Durante el proceso se ha monitorizado la evolución de la función de pérdida tanto en el conjunto de entrenamiento como en el de validación, lo que ha permitido analizar el comportamiento del modelo y detectar posibles indicios de sobreajuste.
 
-El aumento de datos se aplica únicamente durante el entrenamiento, permitiendo que el modelo vea versiones variadas de las imágenes. Esto contribuye significativamente a mejorar la generalización del modelo respecto a una CNN sin aumento de datos.
-
-
 ### Hiperparámetros de entrenamiento
 
-La tasa de aprendizaje se establece en 0.001. El entrenamiento se realiza durante 50 épocas, utilizando un batch size de 64.
+La tasa de aprendizaje se establece en 0.001. El entrenamiento se realiza durante 30 épocas, utilizando un batch size de 64.
 
 El modelo emplea una arquitectura CNN con capas convolucionales (3→32, 32→64) seguidas de capas lineales con funciones de activación ReLU y regularización mediante dropout para reducir el sobreajuste.
 
 La selección de estos hiperparámetros se realizó de forma iterativa, comparando el validation loss obtenido con distintas configuraciones de arquitectura, épocas y tamaño de batch.
-
-Las transformaciones de aumento de datos incluyen rotaciones (±15°), desplazamientos horizontales (±10%) y zoom (0.9-1.1).
 
 ### Grafo de la función de pérdida
 
@@ -185,18 +173,15 @@ Las transformaciones de aumento de datos incluyen rotaciones (±15°), desplazam
 ### Discusión sobre el proceso de entrenamiento
 
 Durante el entrenamiento se observa una disminución progresiva de la función de pérdida en el conjunto de entrenamiento, mientras que el loss de validación también desciende en las primeras épocas y posteriormente tiende a estabilizarse. Esto indica que el modelo aprende patrones relevantes al inicio, pero que la mejora se vuelve más limitada a medida que avanza el entrenamiento.
- El impacto positivo del aumento de datos se evidencia en la reducción del sobreajuste comparado con una CNN sin ampliación de datos.
 
-Se observa que aumentar el número de épocas más allá de 50 no produce mejoras significativas en la pérdida de validación. Por este motivo, se selecciona el modelo correspondiente al menor validation loss obtenido durante el entrenamiento como configuración final.
+
+Se observa que aumentar el número de épocas más allá de 30 no produce mejoras significativas en la pérdida de validación. Por este motivo, se selecciona el modelo correspondiente al menor validation loss obtenido durante el entrenamiento como configuración final.
 
 ## Evaluación
 
 ### Métricas de evaluación
 
-Las métricas obtenidas para los conjuntos de entrenamiento, validación y test muestran un comportamiento coherente con el proceso de aprendizaje del modelo. La pérdida en entrenamiento es inferior a la de validación y test, lo que indica que el modelo logra ajustarse a los datos vistos durante el entrenamiento. La accuracy obtenida en validación y test es similar, lo que sugiere que el modelo presenta una capacidad de generalización razonable.
-
-En conjunto, los resultados reflejan que el modelo CNN con aumento de datos es capaz de aprender patrones relevantes del conjunto CIFAR-10 de forma más efectiva que una arquitectura MLP, aprovechando la estructura espacial de las imágenes.
-
+Las métricas obtenidas para los conjuntos de entrenamiento, validación y test muestran un comportamiento coherente con el proceso de aprendizaje del modelo. La pérdida en entrenamiento es inferior a la de validación y test, lo que indica que el modelo logra ajustarse a los datos vistos durante el entrenamiento. La accuracy obtenida en validación y test es la misma ya que los datos son los mismos. Esto se ha realizado para simplificar la evaluación el entrenamiento.
 
 Las métricas de cada conjunto de datos se representan:
 
@@ -222,40 +207,29 @@ Ejemplo para el conjunto de pruebas:
 
 ¿Cómo resuelve el modelo el problema?
 
-El modelo resuelve el problema mediante capas convolucionales que extraen características locales de las imágenes, preservando la información espacial. A través de múltiples bloques convolucionales seguidos de max pooling, el modelo aprende a identificar patrones visuales cada vez más complejos. El aumento de datos permite que el modelo vea variaciones de las imágenes, aprendiendo características invariantes a estas transformaciones. A partir de los logits generados en la última capa, la clase predicha se obtiene seleccionando la puntuación más alta. De este modo, el modelo aprende a discriminar entre las 10 clases del conjunto CIFAR-10 basándose en características visuales extraídas efectivamente.
+El modelo resuelve el problema mediante capas convolucionales que extraen características locales de las imágenes, preservando la información espacial. A través de múltiples bloques convolucionales seguidos de max pooling, el modelo aprende a identificar patrones visuales cada vez más complejos. A partir de los logits generados en la última capa, la clase predicha se obtiene seleccionando la puntuación más alta. De este modo, el modelo aprende a discriminar entre las 10 clases del conjunto CIFAR-10 basándose en características visuales extraídas efectivamente.
 
 ¿Hay sobreajuste, subajuste o algún otro problema?
 
-Este modelo presenta un nivel de sobreajuste menor comparado con una arquitectura MLP, gracias al aumento de datos y a la regularización mediante dropout. La pérdida en entrenamiento es superior a la de una CNN sin aumento de datos, pero la pérdida de validación es más baja, indicando una mejor generalización. Las métricas de validación y test son similares, lo que indica una generalización razonable. No se aprecia un subajuste claro, ya que el modelo consigue reducir la pérdida y alcanzar una accuracy satisfactoria.
+Este modelo presenta un nivel de sobreajuste menor comparado con la arquitectura MLP, gracias al aumento de datos y a la regularización mediante dropout. Las métricas de validación y test son iguales. No se aprecia un subajuste claro, ya que el modelo consigue reducir la pérdida y alcanzar una accuracy satisfactoria.
 
 ¿Cómo podemos mejorar el modelo?
 
-El modelo podría mejorarse experimentando con arquitecturas más profundas o con diferentes estrategias de aumento de datos. También se podrían explorar técnicas de regularización adicionales como batch normalization. Sin embargo, los experimentos sugieren que la arquitectura CNN actual con aumento de datos ya proporciona un buen balance entre capacidad de aprendizaje y generalización.
+El modelo podría mejorarse experimentando con arquitecturas más profundas o con  estrategias de aumpliación de datos. También se podrían explorar técnicas de regularización adicionales como batch normalization. Sin embargo, los experimentos sugieren que la arquitectura CNN actual con aumento de datos ya proporciona un buen balance entre capacidad de aprendizaje y generalización.
 
 ¿Cómo se generalizará este modelo a nuevos datos?
 
-Dado que las métricas obtenidas en el conjunto de test son similares a las de validación, se espera que el modelo generalice de forma razonable a nuevas imágenes procedentes de la misma distribución que CIFAR-10. El aumento de datos durante el entrenamiento ha contribuido a que el modelo aprenda características más robustas y generales, mejorando su desempeño en datos no vistos.
+Dado que las métricas obtenidas en el conjunto de test son similares a las de validación, se espera que el modelo generalice de forma razonable a nuevas imágenes procedentes de la misma distribución que CIFAR-10. 
 
 ## Diseño de bucles de retroalimentación
 
 El proceso de mejora del modelo se realizó de forma iterativa. En una primera fase se empleó una arquitectura CNN simple con pocas capas convolucionales, observando que el modelo era capaz de aprender parcialmente el problema, aunque con un rendimiento limitado y presencia de sobreajuste.
 
-Posteriormente, se incorporó el aumento de datos en el conjunto de entrenamiento. Este cambio permitió reducir el sobreajuste significativamente, mejorando el validation loss y la capacidad de generalización del modelo. Se experimentó con diferentes tipos de transformaciones, encontrando que una combinación de rotaciones, desplazamientos y zoom proporcionaba los mejores resultados.
-
-También se experimentó con la arquitectura, aumentando el número de filtros en las capas convolucionales. Se observó que incrementar excesivamente la capacidad del modelo sin un correspondiente aumento en los datos de entrenamiento no mejoraba el rendimiento de generalización.
+También se experimentó con la arquitectura, aumentando el número de filtros en las capas convolucionales. 
 
 La introducción de dropout entre las capas lineales contribuyó a reducir ligeramente el validation loss, ayudando a controlar el sobreajuste cuando se incrementó la capacidad del modelo.
 
-El mejor resultado se obtuvo con una arquitectura CNN moderada, aumento de datos completo, 50 épocas y batch size 64.
-
-| Arquitectura | Data Augmentation | Épocas | Batch size | Dropout | Best val loss |
-| ------------ | ----------------- | ------ | ---------- | ------- | ------------- |
-| 32-64        | No                | 50     | 64         | 0.5     | 1.2456        |
-| 32-64        | Sí (básico)       | 50     | 64         | 0.5     | 1.1823        |
-| 32-64        | Sí (completo)     | 50     | 64         | 0.5     | 1.0945        |
-| 64-128       | Sí (completo)     | 50     | 64         | 0.5     | 1.1234        |
-| 32-64        | Sí (completo)     | 60     | 64         | 0.5     | 1.0923        |
-| 32-64        | Sí (completo)     | 50     | 32         | 0.5     | 1.1025        |
+El mejor resultado se obtuvo con una arquitectura CNN con arquitectura VGGNet de 30 épocas y batch size 64.
 
 ## Preguntas
 
@@ -263,18 +237,13 @@ Por favor, responde a las siguientes preguntas. Incluye gráficos si es necesari
 
 ### ¿Cuáles son las diferencias que encontraste entre el modelo anterior y este?
 
-La principal diferencia radica en la arquitectura utilizada: el ejercicio anterior (ejercicio 05) utiliza un Perceptrón Multicapa (MLP) que aplana completamente las imágenes, mientras que este ejercicio utiliza una Red Neuronal Convolucional (CNN) que preserva la estructura espacial.
+La principal diferencia radica en la arquitectura utilizada: el ejercicio anterior (ejercicio 03) utiliza un Perceptrón Multicapa (MLP), mientras que este ejercicio utiliza una Red Neuronal Convolucional (CNN) que preserva la estructura espacial de las imágenes.
 
-Otra diferencia fundamental es el uso de aumento de datos en esta CNN, que introduce variaciones en las imágenes de entrenamiento. Esto mejora significativamente la capacidad de generalización del modelo comparado con una CNN sin aumento de datos.
+En términos de rendimiento, la CNN con aumento de datos alcanza una accuracy superior a la del MLP, demostrando que la arquitectura convolucional es más adecuada para tareas de clasificación de imágenes. 
 
-En términos de rendimiento, la CNN con aumento de datos alcanza una accuracy superior a la del MLP, demostrando que la arquitectura convolucional es más adecuada para tareas de clasificación de imágenes. Además, el aumento de datos contribuye a reducir el sobreajuste de manera más efectiva que otras técnicas de regularización.
-
-La diferencia de accuracy entre una CNN sin aumento de datos y una con aumento es típicamente del 5-10%, confirmando el impacto positivo de esta técnica.
 
 ### ¿El modelo se generaliza bien a datos nuevos?
 
-El modelo presenta una capacidad de generalización notablemente buena. Esto se observa en la similitud entre las métricas obtenidas en los conjuntos de validación y test, lo que indica que el modelo mantiene un rendimiento estable sobre datos no vistos durante el entrenamiento.
+El modelo presenta una capacidad de generalización notablemente buena. El modelo mantiene un rendimiento estable sobre datos no vistos durante el entrenamiento.
 
-La diferencia entre las métricas de entrenamiento y validación es moderada, lo que indica la presencia de un leve sobreajuste, aunque menos pronunciado que en una CNN sin aumento de datos. El comportamiento del modelo en el conjunto de test confirma que ha aprendido patrones generales del problema y no únicamente los datos de entrenamiento.
-
-El aumento de datos es el factor principal que mejora la generalización, permitiendo que el modelo aprenda características invariantes a pequeñas transformaciones. Esto se traduce en una mejor capacidad del modelo para clasificar correctamente nuevas imágenes procedentes de la misma distribución que CIFAR-10.
+La diferencia entre las métricas de entrenamiento y validación es moderada, lo que indica la presencia de un leve sobreajuste. El comportamiento del modelo en el conjunto de test confirma que ha aprendido patrones generales del problema y no únicamente los datos de entrenamiento.
