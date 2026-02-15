@@ -27,6 +27,7 @@ Se trata de un problema de clasificación multiclase donde cada imagen debe asig
 ### Formalización de tareas (Inferencia)
 
 La red convilucional debe aprender a asignar cada imagen del CIFAR-10 una de las 10 clases posibles.
+
 $$ R^{32X32X3} --> {0, ..., 9} $$
 
 Durante la inferencia, la red ya tiene todos sus parámetros entrenados, así que simplemente aplica esa función aprendida a las imágenes correspondientes.
@@ -45,8 +46,12 @@ La predicción del modelo es la clase con mayor probabilidad.
 
 $$ y'=argmaxp_i $$
 
-La función completa es $$ 𝑦
-=𝑓(𝑊,𝑋) $$
+La función completa es 
+
+$$
+𝑦=𝑓(𝑊,𝑋)
+$$
+
 pero ahora 𝑊 representa todos los pesos de todas las capas, no una matriz 1×1.
 
 
@@ -174,7 +179,6 @@ La selección de estos hiperparámetros se realizó de forma iterativa, comparan
 
 Durante el entrenamiento se observa una disminución progresiva de la función de pérdida en el conjunto de entrenamiento, mientras que el loss de validación también desciende en las primeras épocas y posteriormente tiende a estabilizarse. Esto indica que el modelo aprende patrones relevantes al inicio, pero que la mejora se vuelve más limitada a medida que avanza el entrenamiento.
 
-
 Se observa que aumentar el número de épocas más allá de 30 no produce mejoras significativas en la pérdida de validación. Por este motivo, se selecciona el modelo correspondiente al menor validation loss obtenido durante el entrenamiento como configuración final.
 
 ## Evaluación
@@ -240,7 +244,6 @@ Por favor, responde a las siguientes preguntas. Incluye gráficos si es necesari
 La principal diferencia radica en la arquitectura utilizada: el ejercicio anterior (ejercicio 03) utiliza un Perceptrón Multicapa (MLP), mientras que este ejercicio utiliza una Red Neuronal Convolucional (CNN) que preserva la estructura espacial de las imágenes.
 
 En términos de rendimiento, la CNN con aumento de datos alcanza una accuracy superior a la del MLP, demostrando que la arquitectura convolucional es más adecuada para tareas de clasificación de imágenes. 
-
 
 ### ¿El modelo se generaliza bien a datos nuevos?
 

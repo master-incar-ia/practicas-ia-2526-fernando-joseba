@@ -33,7 +33,6 @@ def train_model(output_folder: Path, device: torch.device):
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.0, 0.0, 0.0), (1.0, 1.0, 1.0))])
 
     # Create an instance of the dataset
-    
     train_dataset = CIFAR10Dataset("./data", train=True, transform=transform) # Dataset de entrenamiento, true para cargar el dataset de entrenamiento, false para cargar el dataset de test
     val_dataset = CIFAR10Dataset("./data", train=False, transform=transform) # Dataset de validación, false para cargar el dataset de test
     test_dataset = CIFAR10Dataset("./data", train=False, transform=transform) # Dataset de test, es el mismo que el de validación pero se usará para evaluar el modelo al final del entrenamiento
@@ -50,7 +49,6 @@ def train_model(output_folder: Path, device: torch.device):
     output_dim=10 # CIFAR-10 tiene 10 clases
     num_hidden_neurons=64 # Número de neuronas en las capas ocultas
     lr=0.001 # Learning rate (tasa de aprendizaje)
-    # model = MultiLayerPerceptron_05(input_dim=input_dim, output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     model = ConvolutionalNeuralNetwork(output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     criterion = nn.CrossEntropyLoss() # Función de pérdida. Se usa CrossEntropyLoss porque es un problema de clasificación
     optimizer = optim.AdamW(model.parameters(), lr=lr) # AdamW es el algoritmo de optimización que se usará para actualizar los pesos del modelo durante el entrenamiento
@@ -62,7 +60,6 @@ def train_model(output_folder: Path, device: torch.device):
 
     train_losses = []
     val_losses = []
-
 
     for epoch in tqdm(range(num_epochs)):
         model.train()
@@ -134,6 +131,3 @@ if __name__ == "__main__":
     device = get_device("auto") # choices are "auto", "cpu", "cuda"
     print(f"Using device: {device}")
     train_model(output_folder, device=device)
-
-   
-    

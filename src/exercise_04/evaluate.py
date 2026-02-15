@@ -97,7 +97,7 @@ def evaluate_and_plot(loader, model, dataset_name, output_folder, device, class_
         cm[int(t), int(p)] += 1
 
     plt.figure(figsize=(10, 8))
-    sns.heatmap(cm, annot=True, cmap="Blues",  fmt="d", xticklabels=class_names, yticklabels=class_names)
+    sns.heatmap(cm, annot=True, cmap="Blues", fmt="d", xticklabels=class_names, yticklabels=class_names)
     plt.title(f"Confusion matrix for {dataset_name} dataset")
     plt.ylabel("True label")
     plt.xlabel("Predicted label")
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     # Data augmentation
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.0, 0.0, 0.0), (1.0, 1.0, 1.0))])
 
-        # Create an instance of the dataset
+    # Create an instance of the dataset
     train_dataset = CIFAR10Dataset("./data", train=True, transform=transform)
     test_dataset = CIFAR10Dataset("./data", train=False, transform=transform)
     val_dataset = CIFAR10Dataset("./data", train=False, transform=transform)
@@ -157,8 +157,7 @@ if __name__ == "__main__":
     # Load the best model weights
     input_dim=3*32*32 # Las imagenes CIFAR-10 son de 32x32 píxeles con 3 canales (RGB)
     output_dim=10 # CIFAR-10 tiene 10 clases
-    num_hidden_neurons=64
-    # Número de neuronas en las capas ocultas
+    num_hidden_neurons=64 # Número de neuronas en las capas ocultas
     model = ConvolutionalNeuralNetwork(output_dim=output_dim, num_hidden_neurons=num_hidden_neurons).to(device)
     model.load_state_dict(torch.load(output_folder / "best_model.pth", map_location=device, weights_only=True))
 
