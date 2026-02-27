@@ -159,13 +159,13 @@ Se utiliza el optimizador AdamW debido a su estabilidad durante el entrenamiento
 
 ## Entrenamiento
 
-El entrenamiento se ha realizado durante 30 épocas, seleccionando el modelo con menor validation loss como mejor configuración.
+El entrenamiento se ha realizado durante 40 épocas, seleccionando el modelo con menor validation loss como mejor configuración.
 
 Durante el proceso se ha monitorizado la evolución de la función de pérdida tanto en el conjunto de entrenamiento como en el de validación, lo que ha permitido analizar el comportamiento del modelo y detectar posibles indicios de sobreajuste.
 
 ### Hiperparámetros de entrenamiento
 
-La tasa de aprendizaje se establece en 0.001. El entrenamiento se realiza durante 30 épocas, utilizando un batch size de 64.
+La tasa de aprendizaje se establece en 0.001. El entrenamiento se realiza durante 35 épocas, utilizando un batch size de 64.
 
 El modelo emplea una arquitectura CNN con capas convolucionales (3→32, 32→64) seguidas de capas lineales con funciones de activación ReLU y regularización mediante dropout para reducir el sobreajuste.
 
@@ -177,9 +177,9 @@ La selección de estos hiperparámetros se realizó de forma iterativa, comparan
 
 ### Discusión sobre el proceso de entrenamiento
 
-Durante el entrenamiento se observa una disminución progresiva de la función de pérdida en el conjunto de entrenamiento, mientras que el loss de validación también desciende en las primeras épocas y posteriormente tiende a estabilizarse. Esto indica que el modelo aprende patrones relevantes al inicio, pero que la mejora se vuelve más limitada a medida que avanza el entrenamiento.
+Durante el entrenamiento se observa una disminución progresiva de la función de pérdida en el conjunto de entrenamiento, mientras que el loss de validación también desciende en las primeras épocas y posteriormente tiende a estabilizarse. Esto indica que el modelo aprende patrones relevantes al inicio.
 
-Se observa que aumentar el número de épocas más allá de 30 no produce mejoras significativas en la pérdida de validación. Por este motivo, se selecciona el modelo correspondiente al menor validation loss obtenido durante el entrenamiento como configuración final.
+Se observa que aumentar el número de épocas más allá de 40 no produce mejoras significativas en el loss validation. Por este motivo, se selecciona el modelo correspondiente al menor validation loss obtenido durante el entrenamiento como configuración final. Se guarda para la porsterior evaluación.
 
 ## Evaluación
 
@@ -211,15 +211,21 @@ Ejemplo para el conjunto de pruebas:
 
 ¿Cómo resuelve el modelo el problema?
 
-El modelo resuelve el problema mediante capas convolucionales que extraen características locales de las imágenes, preservando la información espacial. A través de múltiples bloques convolucionales seguidos de max pooling, el modelo aprende a identificar patrones visuales cada vez más complejos. A partir de los logits generados en la última capa, la clase predicha se obtiene seleccionando la puntuación más alta. De este modo, el modelo aprende a discriminar entre las 10 clases del conjunto CIFAR-10 basándose en características visuales extraídas efectivamente.
+El modelo resuelve el problema mediante capas convolucionales que extraen características locales de las imágenes, preservando la información espacial. A través de múltiples bloques convolucionales seguidos de max pooling, el modelo aprende a identificar patrones visuales cada vez más complejos. 
+A partir de los logits (valores reales) generados en la última capa, la clase predicha se obtiene seleccionando la puntuación más alta. 
+De este modo, el modelo aprende a discriminar entre las 10 clases del conjunto CIFAR-10 basándose en características visuales extraídas efectivamente.
+
+La funcion de pérdidad de la Entropia Cruzada aplica internamente (por PyTorch) aplica internamente softmax en problemas de clasificación multiclase.
 
 ¿Hay sobreajuste, subajuste o algún otro problema?
 
-Este modelo presenta un nivel de sobreajuste menor comparado con la arquitectura MLP, gracias al aumento de datos y a la regularización mediante dropout. Las métricas de validación y test son iguales. No se aprecia un subajuste claro, ya que el modelo consigue reducir la pérdida y alcanzar una accuracy satisfactoria.
+Este modelo presenta un nivel de sobreajuste menor comparado con la arquitectura MLP a la regularización mediante dropout. Las métricas de validación y test son iguales debido a que el dataset es igual. No se aprecia un subajuste claro, ya que el modelo consigue reducir la pérdida y alcanzar una accuracy satisfactoria del 70%.
 
 ¿Cómo podemos mejorar el modelo?
 
-El modelo podría mejorarse experimentando con arquitecturas más profundas o con  estrategias de aumpliación de datos. También se podrían explorar técnicas de regularización adicionales como batch normalization. Sin embargo, los experimentos sugieren que la arquitectura CNN actual con aumento de datos ya proporciona un buen balance entre capacidad de aprendizaje y generalización.
+El modelo podría mejorarse experimentando con arquitecturas más profundas o con  estrategias de aumpliación de datos. También se podrían explorar técnicas de regularización adicionales como batch normalization. 
+
+Sin embargo, los experimentos sugieren que la arquitectura CNN actual con aumento de datos ya proporciona un buen balance entre capacidad de aprendizaje y generalización.
 
 ¿Cómo se generalizará este modelo a nuevos datos?
 
@@ -233,7 +239,7 @@ También se experimentó con la arquitectura, aumentando el número de filtros e
 
 La introducción de dropout entre las capas lineales contribuyó a reducir ligeramente el validation loss, ayudando a controlar el sobreajuste cuando se incrementó la capacidad del modelo.
 
-El mejor resultado se obtuvo con una arquitectura CNN con arquitectura VGGNet de 30 épocas y batch size 64.
+El mejor resultado se obtuvo con una arquitectura CNN con arquitectura VGGNet de 40 épocas y batch size 64.
 
 ## Preguntas
 
@@ -250,3 +256,13 @@ En términos de rendimiento, la CNN con aumento de datos alcanza una accuracy su
 El modelo presenta una capacidad de generalización notablemente buena. El modelo mantiene un rendimiento estable sobre datos no vistos durante el entrenamiento.
 
 La diferencia entre las métricas de entrenamiento y validación es moderada, lo que indica la presencia de un leve sobreajuste. El comportamiento del modelo en el conjunto de test confirma que ha aprendido patrones generales del problema y no únicamente los datos de entrenamiento.
+
+---
+
+### Nota sobre las conclusiones y las gráficas
+
+Es importante que las conclusiones sobre el comportamiento del validation loss y la accuracy se correspondan exactamente con lo que muestran las gráficas. Por ejemplo, si la gráfica solo muestra hasta la época 30, no se puede afirmar que el validation loss no baja a partir de esa época, ya que no hay datos visuales de lo que ocurre después. Solo se puede concluir lo que se observa en el rango mostrado.
+
+### Por qué se usan logits y no activación en la capa final
+
+En la implementación con PyTorch, la última capa del modelo no lleva activación (ni softmax ni sigmoid). El modelo devuelve logits (valores reales sin normalizar) porque la función de pérdida CrossEntropyLoss aplica internamente softmax de forma eficiente y estable. Si se aplicara softmax en la última capa y luego CrossEntropyLoss, se estaría aplicando dos veces y podría causar errores numéricos y resultados incorrectos. Por eso, en problemas de clasificación multiclase, la salida del modelo son logits y la función de pérdida se encarga de convertirlos en probabilidades y calcular la entropía cruzada.
