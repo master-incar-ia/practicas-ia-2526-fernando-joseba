@@ -256,13 +256,3 @@ En términos de rendimiento, la CNN con aumento de datos alcanza una accuracy su
 El modelo presenta una capacidad de generalización notablemente buena. El modelo mantiene un rendimiento estable sobre datos no vistos durante el entrenamiento.
 
 La diferencia entre las métricas de entrenamiento y validación es moderada, lo que indica la presencia de un leve sobreajuste. El comportamiento del modelo en el conjunto de test confirma que ha aprendido patrones generales del problema y no únicamente los datos de entrenamiento.
-
----
-
-### Nota sobre las conclusiones y las gráficas
-
-Es importante que las conclusiones sobre el comportamiento del validation loss y la accuracy se correspondan exactamente con lo que muestran las gráficas. Por ejemplo, si la gráfica solo muestra hasta la época 30, no se puede afirmar que el validation loss no baja a partir de esa época, ya que no hay datos visuales de lo que ocurre después. Solo se puede concluir lo que se observa en el rango mostrado.
-
-### Por qué se usan logits y no activación en la capa final
-
-En la implementación con PyTorch, la última capa del modelo no lleva activación (ni softmax ni sigmoid). El modelo devuelve logits (valores reales sin normalizar) porque la función de pérdida CrossEntropyLoss aplica internamente softmax de forma eficiente y estable. Si se aplicara softmax en la última capa y luego CrossEntropyLoss, se estaría aplicando dos veces y podría causar errores numéricos y resultados incorrectos. Por eso, en problemas de clasificación multiclase, la salida del modelo son logits y la función de pérdida se encarga de convertirlos en probabilidades y calcular la entropía cruzada.
